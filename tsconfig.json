@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
     "target": "ESNext",
+
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "allowJs": true, // Allow JavaScript files
-    "checkJs": false, // Disable type checking for JavaScript files
-    "noEmit": true, // Prevent emitting output files
+    "allowJs": true,
+    "noEmit": true,
     "skipLibCheck": true,
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -21,8 +21,8 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": [
-    "src/**/*" // Ensure your source files are included
-  ],
+  "include": ["src/**/*"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
+
+

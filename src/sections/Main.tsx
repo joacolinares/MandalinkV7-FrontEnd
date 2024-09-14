@@ -3,6 +3,7 @@ import { client } from "@/client";
 import mandalink_logo from "@/assets/mandalink_logo.svg";
 import { useTranslation } from "react-i18next";
 import React from "react";
+import { IoDocumentTextOutline } from "react-icons/io5";
 
 const Main = () => {
   const { t, i18n } = useTranslation();
@@ -39,10 +40,12 @@ const Main = () => {
 
       <div className="w-full  flex flex-col items-center justify-center mt-10 outline-red-500 outline-dashed ">
         <div className="w-full flex flex-row justify-between gap-4">
-          <button className="!bg-c-violet  !text-white !font-light !py-1 !px-1 !rounded-md !shadow-lg !hover:bg-purple-600 !transition !text-sm ">
+          <button className="!bg-c-violet  !text-white !font-light !py-1 !px-1 !rounded-md !shadow-lg !hover:bg-purple-600 !transition !text-sm  flex flex-row gap-2">
+            <IoDocumentTextOutline />
             {t("landing.downloadHereEnglish")}
           </button>
-          <button className="!bg-c-violet  !text-white !font-light !py-1 !px-1 !rounded-md !shadow-lg !hover:bg-purple-600 !transition !text-sm ">
+          <button className="!bg-c-violet  !text-white !font-light !py-1 !px-1 !rounded-md !shadow-lg !hover:bg-purple-600 !transition !text-sm flex flex-row gap-2">
+            <IoDocumentTextOutline />
             {t("landing.downloadHereSpanish")}
           </button>
         </div>
