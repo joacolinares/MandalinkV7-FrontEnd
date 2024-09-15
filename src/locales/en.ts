@@ -25,7 +25,7 @@ export default {
     totalReferred: "Total referred",
     level: "Level",
     download: "Download",
-    TotalReferralInvestment: "Total referral investment",
+    totalReferralInvestment: "Total referral investment",
     copy: "Copy",
     // ------------------------------------------------
     pushFund: "Push fund",

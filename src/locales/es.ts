@@ -13,15 +13,15 @@ export default {
     totalDistributed: "Total distribuido",
     withdraw: "Retirar",
     // ------------------------------------------------
-    selectPool: "Seleccionar pool",
+    selectPool: "Elije pool",
     buyPosition: "Comprar posición",
     // ------------------------------------------------
     statistics: "Estadísticas",
     totalUsers: "Total de usuarios",
     position: "Posición",
-    payed: "Pagado",
+    paid: "Pagos",
     // ------------------------------------------------
-    referred: "Referido",
+    referred: "Referidos",
     totalReferred: "Total de referidos",
     level: "Nivel",
     download: "Descargar",
