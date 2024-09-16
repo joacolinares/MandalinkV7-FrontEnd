@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 
+//Recibe valor y moneda en este formato "50 USDT", separa eso en partes y las muestra
 const Card: React.FC<{ amount: string }> = ({ amount }) => {
   const { t } = useTranslation();
   const [value, currency] = amount.split(" ");
@@ -10,7 +11,7 @@ const Card: React.FC<{ amount: string }> = ({ amount }) => {
         <span className="text-2xl font-bold break-words">{value}</span>
         <span className="text-lg">{currency}</span>
       </div>
-      <button className="mt-2 bg-c-violet text-white text-base rounded-lg px-2 py-1 w-[8rem]">
+      <button className="mt-2 bg-c-violet text-white text-base rounded-lg px-2 py-1 w-[8rem] shadow-md hover:!bg-opacity-80  ">
         {t("landing.buyPosition")}
       </button>
     </div>

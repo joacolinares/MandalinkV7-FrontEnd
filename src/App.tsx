@@ -3,5 +3,9 @@ import { Landing } from "./pages/landing/Landing";
 import { client } from "@/client"; */
 
 export function App() {
-  return <Landing />;
+  return (
+    <main className="gradient-background w-full">
+      <Landing />
+    </main>
+  );
 }

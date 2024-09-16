@@ -9,7 +9,6 @@ import { SingleValue } from "react-select";
 import PushFund from "@/sections/PushFund";
 import engFlag from "@/assets/icons/eng.png";
 import espFlag from "@/assets/icons/esp.png";
-import "./landing.css";
 
 /* import { ConnectButton } from "thirdweb/react";
 import { client } from "@/client"; */
@@ -27,13 +26,13 @@ export function Landing() {
   const [distributed, setDistributed] = useState(1500);
   //Estos son los datos que se van a mostrar en statistics section
   const [totalUsers, setTotalUsers] = useState({
-    totalUsersPosition1: 1000,
-    totalUsersPosition2: 800,
-    totalUsersPosition3: 600,
-    totalUsersPosition4: 900,
-    totalUsersPosition5: 700,
-    totalUsersPosition6: 500,
-    totalUsersPosition7: 400,
+    totalUsersPosition1: 100,
+    totalUsersPosition2: 200,
+    totalUsersPosition3: 300,
+    totalUsersPosition4: 400,
+    totalUsersPosition5: 500,
+    totalUsersPosition6: 600,
+    totalUsersPosition7: 700,
   });
   const [paid, setPaid] = useState({
     paidPosition1: 500,
@@ -176,7 +175,6 @@ export function Landing() {
   };
 
   // Estados para el componente PushFund
-  const [totalPushFunds, setTotalPushFunds] = useState(0.0);
   const [contractAddress, setContractAddress] = useState("0x0000000000000000");
 
   const mainSectionData = {
@@ -195,7 +193,7 @@ export function Landing() {
   ];
 
   return (
-    <section className="px-4 w-full flex justify-center">
+    <section className="gradient-background px-4 w-full flex justify-center">
       <div className="max-w-[100%] md:max-w-[60%] xl:max-w-[60%] 2xl:max-w-[40%]">
         <nav className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-2 z-50">
           <div className="flex items-center gap-2 optionCosas">
@@ -246,12 +244,10 @@ export function Landing() {
         </nav>
         <Main {...mainSectionData} />
         <SelectPoolSection />
+
         <StatisticsSection stats={statisticsData} />
         <ReferralsSection data={referralData} />
-        <PushFund
-          totalPushFunds={totalPushFunds}
-          contractAddress={contractAddress}
-        />
+        <PushFund contractAddress={contractAddress} />
 
         <div className="h-52"></div>
       </div>
