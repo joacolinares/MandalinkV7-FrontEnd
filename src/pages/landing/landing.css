@@ -1,0 +1,11 @@
+.optionCosas select {
+  background-color: transparent !important;
+}
+
+.optionCosas select option {
+  background-color: transparent !important;
+}
+
+.optionCosas select option:hover {
+  background-color: black !important; 
+}

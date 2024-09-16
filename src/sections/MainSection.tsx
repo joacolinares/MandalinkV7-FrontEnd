@@ -1,6 +1,8 @@
 import { useTranslation } from "react-i18next";
 import mandalink_logo from "@/assets/logos/mandalink_logo.svg";
 import { IoDocumentTextOutline } from "react-icons/io5";
+
+
 const MainSection = ({
   initialWallet,
   initialEarnings,

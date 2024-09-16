@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import Main from "../sections/MainSection";
-import SelectPoolSection from "../sections/SelectPoolSection";
-import StatisticsSection from "../sections/StatisticsSection";
-import ReferralsSection from "../sections/ReferralsSection";
+import Main from "../../sections/MainSection";
+import SelectPoolSection from "../../sections/SelectPoolSection";
+import StatisticsSection from "../../sections/StatisticsSection";
+import ReferralsSection from "../../sections/ReferralsSection";
+import Select from "react-select";
+import { SingleValue } from "react-select";
 import PushFund from "@/sections/PushFund";
+import engFlag from "@/assets/icons/eng.png";
+import espFlag from "@/assets/icons/esp.png";
+import "./landing.css";
+
 /* import { ConnectButton } from "thirdweb/react";
 import { client } from "@/client"; */
 
@@ -59,6 +65,18 @@ export function Landing() {
 
   const changeLanguage = (lng: string | undefined) => {
     i18n.changeLanguage(lng);
+  };
+
+  const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
+
+  const handleLanguageChange = (
+    newValue: SingleValue<{ value: string; label: string; flag: string }> | null
+  ) => {
+    if (newValue) {
+      const newLanguage = newValue.value;
+      setCurrentLanguage(newLanguage);
+      changeLanguage(newLanguage);
+    }
   };
 
   //El colorIndicator es la bolita verde o amarilla, como no conozco la lógica que define ese color, dejo este array con las propiedades necesarias para cada carta de estadísticas, para usar esto crean la lógica para definir si el indicador va a ser green o yellow, ponen los datos necesarios en un array con estas propiedades  y lo envían al componente StatisticsSection.tsx y el componente se encarga de mapearlas
@@ -159,9 +177,7 @@ export function Landing() {
 
   // Estados para el componente PushFund
   const [totalPushFunds, setTotalPushFunds] = useState(0.0);
-  const [contractAddress, setContractAddress] = useState(
-    "0x0000000000000000000000000000000000000000"
-  );
+  const [contractAddress, setContractAddress] = useState("0x0000000000000000");
 
   const mainSectionData = {
     initialWallet: wallet,
@@ -172,24 +188,52 @@ export function Landing() {
     distributed: distributed,
   };
 
+  // Options for the select
+  const languageOptions = [
+    { value: "en", label: "Eng", flag: engFlag },
+    { value: "es", label: "Esp", flag: espFlag },
+  ];
+
   return (
     <section className="px-4 w-full flex justify-center">
       <div className="max-w-[100%] md:max-w-[60%] xl:max-w-[60%] 2xl:max-w-[40%]">
         <nav className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-2 z-50">
-          <h1>{t("landing.connectWallet")}</h1>
+          <div className="flex items-center gap-2 optionCosas">
+            <img
+              src={currentLanguage === "en" ? engFlag : espFlag}
+              alt={`${currentLanguage} flag`}
+              className="w-6 h-4"
+            />
+            <Select
+              value={
+                languageOptions.find(
+                  (option) => option.value === currentLanguage
+                ) || null
+              }
+              onChange={handleLanguageChange}
+              options={languageOptions}
+              className="bg-transparent border-none text-sm focus:outline-none"
+              styles={{
+                control: (provided) => ({
+                  ...provided,
+                  backgroundColor: "transparent",
+                  border: "none",
+                  boxShadow: "none",
+                  color: "white",
+                }),
+                singleValue: (provided) => ({
+                  ...provided,
+                  color: "white",
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: "transparent",
+                  color: "black",
+                }),
+              }}
+            />
+          </div>
           <div className="flex gap-2">
-            <button
-              onClick={() => changeLanguage("es")}
-              className="px-2 py-1 text-sm"
-            >
-              Esp
-            </button>
-            <button
-              onClick={() => changeLanguage("en")}
-              className="px-2 py-1 text-sm"
-            >
-              Eng
-            </button>
             {/*  <ConnectButton
               client={client}
               connectButton={{

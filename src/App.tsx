@@ -1,4 +1,4 @@
-import { Landing } from "./pages/Landing";
+import { Landing } from "./pages/landing/Landing";
 /* import { ConnectButton } from "thirdweb/react";
 import { client } from "@/client"; */
 

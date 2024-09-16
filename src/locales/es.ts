@@ -19,7 +19,7 @@ export default {
     statistics: "Estadísticas",
     totalUsers: "Total de usuarios",
     position: "Posición",
-    paid: "Pagos",
+    paid: "Pagados",
     // ------------------------------------------------
     referred: "Referidos",
     totalReferred: "Total de referidos",
@@ -30,6 +30,6 @@ export default {
     // ------------------------------------------------
     pushFund: "Aportar fondos",
     totalPushFunds: "Total de fondos aportados",
-    contractAdress: "Dirección del contrato",
+    contractAddress: "Dirección del contrato",
   },
 };
