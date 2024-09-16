@@ -34,8 +34,22 @@ const PushFund: React.FC<PushFundProps> = ({ contractAddress }) => {
       </div>
 
       <div className="w-full flex mt-8 justify-between items-center">
-        <div className="text-lg mb-2">{t("landing.contractAddress")}</div>
-        <FaTelegram className="w-6 h-6 mr-2" />
+        <a
+          href="https://example.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-lg mb-2 cursor-pointer"
+        >
+          {t("landing.contractAddress")}
+        </a>
+        <a
+          href="https://example.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-lg mb-2 cursor-pointer"
+        >
+          <FaTelegram className="w-6 h-6 mr-2 cursor-pointer" />
+        </a>
       </div>
     </div>
   );

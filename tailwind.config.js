@@ -9,6 +9,7 @@ module.exports = {
       colors: {
         "c-white-text": "#f5f5f5",
         "c-violet": "#5d445f",
+        "c-violet-2": "#866E88",
         "c-violet-button": "#86308A4D",
         "c-yellow": "#E2AA4C",
         "c-black": "#070606",

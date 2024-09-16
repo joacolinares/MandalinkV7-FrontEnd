@@ -36,11 +36,11 @@ const CustomSelect: React.FC<{ options: string[] }> = ({ options }) => {
   };
 
   return (
-    <div className="mt-2 bg-c-violet text-white text-base  px-2 py-1 w-full rounded-md flex items-center justify-between">
-      <div className="flex flex-col -my-1 ">
+    <div className="mt-2 grey-purple-color text-white text-base  px-2 py-1 w-full rounded-md flex items-center justify-between ">
+      <div className="flex flex-col my-1 ">
         <button
           onClick={() => handleChange("up")}
-          className="text-sm leading-none"
+          className="text-sm leading-none "
         >
           &#9650;
         </button>
@@ -62,8 +62,8 @@ const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
 }) => {
   const { t } = useTranslation();
   return (
-    <div className="w-[45%] flex flex-col items-center justify-center rounded-lg m-2 overflow-hidden">
-      <div className="w-full h-44 text-2xl font-semibold text-center bg-c-violet rounded-lg px-2 py-4 flex flex-col justify-between relative">
+    <div className="w-[45%] lg:w-[20%]  flex flex-col items-center justify-center rounded-lg m-2 overflow-visible">
+      <div className="w-full h-44 text-2xl font-semibold text-center grey-purple-color rounded-lg px-2 py-4 flex flex-col justify-between relative">
         <div className="absolute flex flex-row top-2 justify-between w-full">
           <div className="w-6 h-6 border border-white flex items-center justify-center text-sm font-semibold  rounded-md">
             <p className="text-white">{index + 1}</p>
@@ -77,7 +77,7 @@ const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
         </div>
       </div>
       <CustomSelect options={stats.positionOptions} />
-      <button className="mt-2 bg-c-violet active:bg-opacity-80 text-white text-base rounded-md px-2 py-1 w-full ">
+      <button className="mt-2 grey-purple-color active:bg-opacity-80 text-white text-base rounded-md px-2 py-1 w-full hover:outline outline-1">
         {t("landing.paid")} {stats.paid}
       </button>
     </div>

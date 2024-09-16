@@ -29,60 +29,64 @@ const MainSection = ({
 
       <div className="w-full flex flex-col items-center justify-center mt-10">
         <div className="w-full flex flex-row justify-between gap-4">
-          <button className="bg-[#5d445f] text-white font-light rounded-md   text-sm items-center flex flex-row gap-2 hover:!bg-opacity-80 px-2 py-1.5">
+          <button className="grey-purple-color text-white font-light rounded-md  items-center flex flex-row gap-2 hover:!bg-opacity-80 px-2 py-1.5 hover:outline outline-1">
             <IoDocumentTextOutline className="w-6 h-6" />
-            <span className="text-xs">{t("landing.downloadHereEnglish")}</span>
+            <span className="text-md">{t("landing.downloadHereEnglish")}</span>
           </button>
-          <button className="bg-c-violet text-white font-light rounded-md shadow-lg transition text-sm items-center flex flex-row gap-2 hover:!bg-opacity-80 px-2 py-1.5">
+          <button className="grey-purple-color text-white font-light rounded-md  items-center flex flex-row gap-2 hover:!bg-opacity-80 px-2 py-1.5 hover:outline outline-1">
             <IoDocumentTextOutline className="w-6 h-6" />
-            <span className="text-xs">{t("landing.downloadHereSpanish")}</span>
+            <span className="text-md">{t("landing.downloadHereSpanish")}</span>
           </button>
         </div>
 
         <div className="w-full flex flex-col mt-4">
           <div className="w-full flex flex-row justify-between">
             <p>{t("landing.yourWallet")}</p>
-            <p>
+            <p className="font-bold">
               {initialWallet} {" USDT"}
             </p>
           </div>
           <div className="w-full flex flex-row justify-between">
             <p>{t("landing.earnings")}</p>
-            <p>
+            <p className="font-bold">
               {initialEarnings} {" USDT"}
             </p>
           </div>
           <div className="w-full flex flex-row justify-between">
             <p>{t("landing.commissions")}</p>
-            <p>
+            <p className="font-bold">
               {initialCommissions} {" USDT"}
             </p>
           </div>
         </div>
 
-        <h2 className="mt-8">{t("landing.availableForWithdrawal")}</h2>
+        <h2 className="mt-8 font-semibold">
+          {t("landing.availableForWithdrawal")}
+        </h2>
         <div className="w-full flex flex-col mt-4">
           <div className="w-full flex flex-row justify-between">
             <p>TLV</p>
-            <p>
+            <p className="font-bold">
               {initialTlv} {" USDT"}
             </p>
           </div>
           <div className="w-full flex flex-row justify-between">
             <p>{t("landing.totalInvested")}</p>
-            <p>
+            <p className="font-bold">
               {totalInvested} {" USDT"}
             </p>
           </div>
           <div className="w-full flex flex-row justify-between">
             <p>{t("landing.totalDistributed")}</p>
-            <p>
+            <p className="font-bold">
               {distributed} {" USDT"}
             </p>
           </div>
         </div>
-        <button className="bg-[#5d445f] text-white font-light rounded-md shadow-lg transition text-sm items-center flex flex-row gap-2 hover:!bg-opacity-80 px-10 py-1.5 mt-6">
-          <span className="text-sm">{t("landing.withdraw")}</span>
+      </div>
+      <div className="bg-none">
+        <button className="grey-purple-color text-white font-light rounded-md text-sm items-center flex flex-row gap-2 hover:!bg-opacity-80 px-10 py-1.5 mt-6 hover:outline outline-1">
+          <p className="text-sm lg:text-lg">{t("landing.withdraw")}</p>
         </button>
       </div>
     </main>

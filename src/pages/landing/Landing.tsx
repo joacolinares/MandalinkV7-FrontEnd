@@ -10,8 +10,8 @@ import PushFund from "@/sections/PushFund";
 import engFlag from "@/assets/icons/eng.png";
 import espFlag from "@/assets/icons/esp.png";
 
-/* import { ConnectButton } from "thirdweb/react";
-import { client } from "@/client"; */
+import { ConnectButton } from "thirdweb/react";
+import { client } from "@/client";
 
 //En Landing.tsx se llaman los datos necesarios y se le pasan a los componentes, si se debe armar un objeto o un array de objetos, se hace aquí y se le pasa a los demás componentes que muestran esa información
 export function Landing() {
@@ -132,43 +132,43 @@ export function Landing() {
       {
         level: 1,
         percentage: "10%",
-        value: 0,
+        value: 10,
         downloadLink: "https://example.com/download1",
       },
       {
         level: 2,
         percentage: "3%",
-        value: 0,
+        value: 20,
         downloadLink: "https://example.com/download2",
       },
       {
         level: 3,
         percentage: "2%",
-        value: 0,
+        value: 30,
         downloadLink: "https://example.com/download3",
       },
       {
         level: 4,
         percentage: "1%",
-        value: 0,
+        value: 40,
         downloadLink: "https://example.com/download4",
       },
       {
         level: 5,
         percentage: "1%",
-        value: 0,
+        value: 50,
         downloadLink: "https://example.com/download5",
       },
       {
         level: 6,
         percentage: "1%",
-        value: 0,
+        value: 60,
         downloadLink: "https://example.com/download6",
       },
       {
         level: 7,
         percentage: "2%",
-        value: 0,
+        value: 70,
         downloadLink: "https://example.com/download7",
       },
     ],
@@ -195,8 +195,8 @@ export function Landing() {
   return (
     <section className="gradient-background px-4 w-full flex justify-center">
       <div className="max-w-[100%] md:max-w-[60%] xl:max-w-[60%] 2xl:max-w-[40%]">
-        <nav className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 py-2 z-50">
-          <div className="flex items-center gap-2 optionCosas">
+        <nav className="fixed top-0 right-0 w-full flex justify-between md:w-auto items-center px-4 py-2 z-50">
+          <div className="flex items-center gap-2 ">
             <img
               src={currentLanguage === "en" ? engFlag : espFlag}
               alt={`${currentLanguage} flag`}
@@ -232,14 +232,14 @@ export function Landing() {
             />
           </div>
           <div className="flex gap-2">
-            {/*  <ConnectButton
+            <ConnectButton
               client={client}
               connectButton={{
                 label: t("landing.connectWallet"),
                 className:
-                  "!bg-c-violet !h-8 !text-white !font-light !py-1 !px-1 !rounded-md !shadow-lg !hover:bg-purple-600 !transition !text-sm ",
+                  "!bg-c-violet-2 !bg-opacity-80 hover:!bg-opacity-50 !h-8 !text-white !font-light !py-1 !px-1 !rounded-md !shadow-lg  !transition !text-sm ",
               }}
-            /> */}
+            />
           </div>
         </nav>
         <Main {...mainSectionData} />

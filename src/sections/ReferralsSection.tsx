@@ -64,7 +64,7 @@ const Referrals: React.FC<ReferralsProps> = ({ data }) => {
               <div className="flex items-center">
                 <a
                   href={referral.downloadLink}
-                  className="text-white font-light text-xs bg-c-violet rounded px-2 py-1 flex items-center"
+                  className="text-white font-light text-xs grey-purple-color rounded px-2 py-1 flex items-center hover:outline outline-1"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -109,13 +109,13 @@ const Referrals: React.FC<ReferralsProps> = ({ data }) => {
           <span className="font-bold">{totalReferralInvestment}</span>
         </div>
 
-        <div className=" bg-c-violet rounded px-2 py-1 w-full mt-2 max-h-20 overflow-y-auto break-words">
+        <div className=" grey-purple-color rounded px-2 py-1 w-full mt-2 max-h-20 overflow-y-auto break-words">
           {investmentLink}
         </div>
 
         <div className="flex justify-center mt-4">
           <button
-            className="text-center bg-c-violet text-white rounded px-4 py-2"
+            className="text-center grey-purple-color text-white rounded px-4 py-2 hover:outline outline-1"
             onClick={handleCopy}
           >
             {t("landing.copy")}
