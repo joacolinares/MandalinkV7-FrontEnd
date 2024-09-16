@@ -186,7 +186,7 @@ export function Landing() {
     distributed: distributed,
   };
 
-  // Options for the select
+  // Opciones para el select de lenguaje
   const languageOptions = [
     { value: "en", label: "Eng", flag: engFlag },
     { value: "es", label: "Esp", flag: espFlag },
