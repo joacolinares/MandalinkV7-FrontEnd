@@ -1,3 +1,4 @@
+import { t } from "i18next";
 import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -21,6 +22,7 @@ const Indicator: React.FC<{ color: "green" | "yellow" }> = ({ color }) => (
 );
 
 const CustomSelect: React.FC<{ options: string[] }> = ({ options }) => {
+  const { t } = useTranslation();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -51,7 +53,7 @@ const CustomSelect: React.FC<{ options: string[] }> = ({ options }) => {
 
   return (
     <>
-      <div className="mt-2 grey-purple-color text-white text-base px-2 py-1 w-full rounded-md flex items-center justify-between">
+      <div className="mt-2 grey-purple-color text-white text-base px-2 py-1 w-full rounded-md flex items-center justify-between hover:outline hover:outline-1 hover:outline-white">
         <div className="flex flex-col my-1">
           <button
             onClick={() => handleChange("up")}
@@ -75,13 +77,18 @@ const CustomSelect: React.FC<{ options: string[] }> = ({ options }) => {
       </div>
 
       {isOpen && (
-        <div className="fixed  inset-0 bg-black !text-gray-600 bg-opacity-50 flex justify-center items-center z-50">
-          <div ref={modalRef} className="bg-white  rounded-lg p-4 w-80 ">
+        <div className="fixed inset-0 bg-black !text-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+          <div
+            ref={modalRef}
+            className="bg-c-violet-2 text-white rounded-lg p-4 m-4 h-96 w-96 "
+          >
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">Lista</h3>
+              <h3 className="text-lg font-bold text-white">
+                {t("landing.list")}
+              </h3>
               <button
                 onClick={() => setIsOpen(false)}
-                className="text-gray-500 hover:text-gray-700"
+                className=" hover:text-gray-300 text-lg font-bold text-white"
               >
                 &#x2715;
               </button>
@@ -90,7 +97,7 @@ const CustomSelect: React.FC<{ options: string[] }> = ({ options }) => {
               {options.map((option, index) => (
                 <div
                   key={index}
-                  className="p-2 hover:bg-gray-100 cursor-pointer"
+                  className="p-2 hover:bg-gray-100 hover:rounded-md hover:bg-opacity-10"
                   onClick={() => {
                     setSelectedIndex(index);
                     setIsOpen(false);
@@ -128,9 +135,9 @@ const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
         </div>
       </div>
       <CustomSelect options={stats.positionOptions} />
-      <button className="mt-2 grey-purple-color active:bg-opacity-80 text-white text-base rounded-md px-2 py-1 w-full hover:outline outline-1">
-        {t("landing.paid")} {stats.paid}
-      </button>
+      <div className="mt-2 grey-purple-color active:bg-opacity-80 text-white text-base rounded-md px-2 py-1 w-full flex items-center justify-center">
+        <span className="mr-1">{t("landing.paid")}</span> {stats.paid}
+      </div>
     </div>
   );
 };

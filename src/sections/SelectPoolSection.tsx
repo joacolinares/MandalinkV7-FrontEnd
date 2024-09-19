@@ -13,7 +13,7 @@ const Card: React.FC<{ amount: string }> = ({ amount }) => {
       </div>
       <button
         className="mt-2 grey-purple-color text-white text-base rounded-lg px-2 py-1 w-[8rem] shadow-md hover:!bg-opacity-80 hover:outline outline-1"
-        onClick={() => alert("botón de compra de posición clickeado")} // Fixed arrow function syntax
+        onClick={() => alert("botón de compra de posición clickeado")}
       >
         {t("landing.buyPosition")}
       </button>

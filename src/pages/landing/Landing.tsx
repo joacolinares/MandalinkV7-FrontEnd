@@ -237,7 +237,7 @@ export function Landing() {
               connectButton={{
                 label: t("landing.connectWallet"),
                 className:
-                  "!bg-c-violet-2 !bg-opacity-80 hover:!bg-opacity-50 !h-8 !text-white !font-light !py-1 !px-1 !rounded-md !shadow-lg  !transition !text-sm ",
+                  "!bg-c-violet-2 !bg-opacity-80 hover:!bg-opacity-80 !h-8 !text-white !font-light !py-1 !px-1 !rounded-md !shadow-lg  !transition !text-sm hover:!outline hover:!outline-1 hover:!outline-white",
               }}
             />
           </div>

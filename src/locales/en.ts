@@ -20,6 +20,7 @@ export default {
     totalUsers: "Total users",
     position: "Position",
     paid: "Paid",
+    list: "List",
     // ------------------------------------------------
     referred: "Referred",
     totalReferred: "Total referred",
