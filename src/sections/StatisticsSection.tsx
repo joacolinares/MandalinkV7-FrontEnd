@@ -145,7 +145,7 @@ const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
 const StatisticsSection: React.FC<StatisticsSectionProps> = ({ stats }) => {
   const { t } = useTranslation();
   return (
-    <div className="mt-20 flex flex-col items-center">
+    <div className="StatisticsSection mt-20 flex flex-col items-center">
       <h1 className="w-full text-2xl font-bold mb-4 flex flex-col items-start">
         <span>{t("landing.statistics")}</span>
       </h1>

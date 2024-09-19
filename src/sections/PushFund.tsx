@@ -10,7 +10,7 @@ const PushFund: React.FC<PushFundProps> = ({ contractAddress }) => {
   const { t } = useTranslation();
 
   return (
-    <div className="mt-20 flex flex-col items-center">
+    <div className="PushFund mt-20 flex flex-col items-center">
       <div className="w-full">
         <h1 className="text-2xl font-bold mb-4">{t("landing.pushFund")}</h1>
       </div>

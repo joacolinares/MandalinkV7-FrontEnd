@@ -6,7 +6,7 @@ const Card: React.FC<{ amount: string }> = ({ amount }) => {
   const { t } = useTranslation();
   const [value, currency] = amount.split(" ");
   return (
-    <div className=" flex flex-col items-center justify-center rounded-lg m-2 ">
+    <div className="Card flex flex-col items-center justify-center rounded-lg m-2 ">
       <div className="w-[8rem] h-32 text-2xl font-semibold text-center grey-purple-color rounded-lg px-2 py-4 flex flex-col justify-center">
         <span className="text-2xl font-bold break-words">{value}</span>
         <span className="text-lg">{currency}</span>
@@ -34,7 +34,7 @@ const SelectPoolSection: React.FC = () => {
   ];
 
   return (
-    <div className="w-full mt-20 flex flex-col items-center">
+    <div className="SelectPoolSection w-full mt-20 flex flex-col items-center">
       <h1 className="w-full text-2xl font-bold mb-4 flex flex-col items-start">
         <span className="text-left">{t("landing.selectPool")}</span>
       </h1>

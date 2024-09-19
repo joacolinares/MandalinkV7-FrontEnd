@@ -20,7 +20,7 @@ const MainSection = ({
 }) => {
   const { t } = useTranslation();
   return (
-    <main className="flex w-full items-center justify-center flex-col">
+    <main className="MainSection flex w-full items-center justify-center flex-col">
       <img
         src={mandalink_logo}
         alt="mandalink logo"

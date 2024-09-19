@@ -193,7 +193,7 @@ export function Landing() {
   ];
 
   return (
-    <section className="gradient-background px-4 w-full flex justify-center">
+    <section className="Landing gradient-background px-4 w-full flex justify-center">
       <div className="max-w-[100%] md:max-w-[60%] xl:max-w-[60%] 2xl:max-w-[40%]">
         <nav className="fixed top-0 right-0 w-full flex justify-between md:w-auto items-center px-4 py-2 z-50">
           <div className="flex items-center gap-2 ">

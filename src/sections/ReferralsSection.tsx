@@ -41,7 +41,7 @@ const Referrals: React.FC<ReferralsProps> = ({ data }) => {
   };
 
   return (
-    <div className="mt-20 flex flex-col items-center ">
+    <div className="Referrals mt-20 flex flex-col items-center ">
       <h1 className="w-full text-2xl font-bold mb-4 flex flex-col items-start">
         <span>{t("landing.referred")}</span>
       </h1>
