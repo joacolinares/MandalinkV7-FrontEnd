@@ -30,7 +30,7 @@ export function Landing() {
   const { data: user } = useReadContract({
     contract: MandaLinkContract,
     method: "function users(address) view returns (address referrer, uint256 directReferrals, uint256 missedOpportunities, uint256 payedExtra, uint256 totalTree)",
-    params: address ? [address.address] : ["0xC14cf4f69b9800bb99D1b8770E250243E7d9D254"]
+    params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
   })
 
   const { data: contractBalance } = useReadContract({
@@ -200,13 +200,10 @@ export function Landing() {
     ],
   };
 
-  // Estados para el componente PushFund
-  const [contractAddress, setContractAddress] = useState("0x0000000000000000");
-
   const mainSectionData = {
     initialWallet: Number(walletBalance) / 10**6,
-    initialEarnings: user ? Number(user[3]) : 0,
-    initialCommissions: user ? Number(user[4]) : 0,
+    initialEarnings: user ? Number(user[3]) / 10**6 : 0,
+    initialCommissions: user ? Number(user[4]) / 10**6 : 0,
     initialTlv: Number(contractBalance) / 10**6,
     totalInvested: Number(totalInvested) / 10**6,
     distributed: Number(distributed) / 10**6,
@@ -274,7 +271,7 @@ export function Landing() {
 
         <StatisticsSection stats={statisticsData} />
         <ReferralsSection data={referralData} />
-        <PushFund contractAddress={contractAddress} />
+        <PushFund />
 
         <div className="h-52"></div>
       </div>

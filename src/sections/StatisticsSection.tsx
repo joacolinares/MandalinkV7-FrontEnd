@@ -53,8 +53,6 @@ const CustomSelect: React.FC<{ options: string[] }> = ({ options }) => {
     };
   }, []);
 
-  
-
   return (
     <>
       <div className="mt-2 grey-purple-color text-white text-base px-2 py-1 w-full rounded-md flex items-center justify-between hover:outline hover:outline-1 hover:outline-white">
@@ -76,7 +74,7 @@ const CustomSelect: React.FC<{ options: string[] }> = ({ options }) => {
           className="flex-grow text-center cursor-pointer"
           onClick={() => setIsOpen(true)}
         >
-          {options.length > 0 ? Number(options[selectedIndex]) : t("landing.noPositions")}
+          {options.length > 0 ? Number(options[selectedIndex]) + 1 : t("landing.noPositions")}
         </div>
       </div>
 
@@ -108,7 +106,7 @@ const CustomSelect: React.FC<{ options: string[] }> = ({ options }) => {
                       setIsOpen(false);
                     }}
                   >
-                    {Number(option)}
+                    {Number(option) + 1}
                   </div>
                 ))
               ) : (

@@ -2,7 +2,7 @@ import { MandaLinkAddress, MandaLinkContract, USDTContract } from "@/utils/contr
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { prepareContractCall, sendTransaction } from "thirdweb";
-import { useActiveAccount } from "thirdweb/react";
+import { useActiveAccount, useReadContract } from "thirdweb/react";
 import { approve } from "thirdweb/extensions/erc20";
 
 //Recibe valor y moneda en este formato "50 USDT", separa eso en partes y las muestra
@@ -14,11 +14,9 @@ const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
   const [ referral, setReferral ] = useState<string | null>("")
 
   const handleJoinPool = async (id: number) => {
-    if (address) {
-      if (referral) {
-        console.log(id + 1)
-        console.log(referral)
 
+    const handleTransaction = async (ref: string) => {
+      if (address) {
         const app = await approve({
           contract: USDTContract,
           spender: MandaLinkAddress,
@@ -30,7 +28,7 @@ const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
         const transaction = prepareContractCall({
           contract: MandaLinkContract,
           method: "function joinPool(uint256 poolId, address referrer, address wallet)",
-          params: [BigInt(id + 1), referral, address.address]
+          params: [BigInt(id + 1), ref, address.address]
         })
 
         const { transactionHash } = await sendTransaction({
@@ -39,8 +37,24 @@ const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
         })
 
         console.log(transactionHash)
+      }
+    }
+
+    if (address) {
+      const { data: user } = useReadContract({
+        contract: MandaLinkContract,
+        method: "function users(address) view returns (address referrer, uint256 directReferrals, uint256 missedOpportunities, uint256 payedExtra, uint256 totalTree)",
+        params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
+      })
+      
+      if (user && user[0]) {
+        handleTransaction("0x0000000000000000000000000000000000000000")
       } else {
-        alert("Por favor ingrese con un link de referido")
+        if (referral) {
+          handleTransaction(referral)
+        } else {
+          alert("Por favor ingrese con un link de referido")
+        }
       }
     }
   }
