@@ -28,16 +28,10 @@ const Referrals: React.FC<ReferralsProps> = ({ data }) => {
   const { data: userData } = useReadContract({
     contract: MandaLinkContract,
     method: "function users(address) view returns (address referrer, uint256 directReferrals, uint256 missedOpportunities, uint256 payedExtra, uint256 totalTree)",
-    params: address ? [address.address] : ["0xC14cf4f69b9800bb99D1b8770E250243E7d9D254"]
+    params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
   })
 
-  const { totalReferrals, investmentLink, referrals } = data;
-
-  // Calculate total referral investment
-  const totalReferralInvestment = referrals.reduce(
-    (total, referral) => total + referral.value,
-    0
-  );
+  const { investmentLink, referrals } = data;
 
   const handleCopy = () => {
     navigator.clipboard
@@ -116,7 +110,7 @@ const Referrals: React.FC<ReferralsProps> = ({ data }) => {
           <span className="font-bold">
             {t("landing.totalReferralInvestment")}
           </span>
-          <span className="font-bold">{totalReferralInvestment}</span>
+          <span className="font-bold">{userData ? Number(userData[4]) / 10**6 : 0} USDT</span>
         </div>
 
         {address &&
