@@ -2,7 +2,6 @@ import { useTranslation } from "react-i18next";
 import mandalink_logo from "@/assets/logos/mandalink_logo.svg";
 import { IoDocumentTextOutline } from "react-icons/io5";
 
-
 const MainSection = ({
   initialWallet,
   initialEarnings,
@@ -65,7 +64,7 @@ const MainSection = ({
         </h2>
         <div className="w-full flex flex-col mt-4">
           <div className="w-full flex flex-row justify-between">
-            <p>TLV</p>
+            <p>TVL</p>
             <p className="font-bold">
               {initialTlv} {" USDT"}
             </p>
@@ -83,11 +82,6 @@ const MainSection = ({
             </p>
           </div>
         </div>
-      </div>
-      <div className="bg-none">
-        <button className="grey-purple-color text-white font-light rounded-md text-sm items-center flex flex-row gap-2 hover:!bg-opacity-80 px-10 py-1.5 mt-6 hover:outline outline-1">
-          <p className="text-sm lg:text-lg">{t("landing.withdraw")}</p>
-        </button>
       </div>
     </main>
   );

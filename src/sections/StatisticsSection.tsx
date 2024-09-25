@@ -1,6 +1,8 @@
+import { MandaLinkContract } from "@/utils/contracts";
 import { t } from "i18next";
 import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { useActiveAccount, useReadContract } from "thirdweb/react";
 
 interface UserStats {
   totalUsers: number;
@@ -13,10 +15,10 @@ interface StatisticsSectionProps {
   stats: UserStats[];
 }
 
-const Indicator: React.FC<{ color: "green" | "yellow" }> = ({ color }) => (
+const Indicator: React.FC<{ amount: number, id: number }> = ({ amount, id }) => (
   <div
     className={`w-6 h-6 rounded-full mr-3 ${
-      color === "green" ? "bg-green-500" : "bg-yellow-500"
+      amount >= id ? "bg-green-500" : "bg-yellow-500"
     }`}
   />
 );
@@ -51,6 +53,8 @@ const CustomSelect: React.FC<{ options: string[] }> = ({ options }) => {
     };
   }, []);
 
+  
+
   return (
     <>
       <div className="mt-2 grey-purple-color text-white text-base px-2 py-1 w-full rounded-md flex items-center justify-between hover:outline hover:outline-1 hover:outline-white">
@@ -72,7 +76,7 @@ const CustomSelect: React.FC<{ options: string[] }> = ({ options }) => {
           className="flex-grow text-center cursor-pointer"
           onClick={() => setIsOpen(true)}
         >
-          {options[selectedIndex]}
+          {options.length > 0 ? Number(options[selectedIndex]) : t("landing.noPositions")}
         </div>
       </div>
 
@@ -94,18 +98,22 @@ const CustomSelect: React.FC<{ options: string[] }> = ({ options }) => {
               </button>
             </div>
             <div className="max-h-[30dvh] overflow-y-auto">
-              {options.map((option, index) => (
-                <div
-                  key={index}
-                  className="p-2 hover:bg-gray-100 hover:rounded-md hover:bg-opacity-10"
-                  onClick={() => {
-                    setSelectedIndex(index);
-                    setIsOpen(false);
-                  }}
-                >
-                  {option}
-                </div>
-              ))}
+              {options.length > 0 ? (
+                options.map((option, index) => (
+                  <div
+                    key={index}
+                    className="p-2 hover:bg-gray-100 hover:rounded-md hover:bg-opacity-10"
+                    onClick={() => {
+                      setSelectedIndex(index);
+                      setIsOpen(false);
+                    }}
+                  >
+                    {Number(option)}
+                  </div>
+                ))
+              ) : (
+                <div className="text-center text-white">{t("landing.noPositions")}</div>
+              )}
             </div>
           </div>
         </div>
@@ -119,31 +127,56 @@ const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
   index,
 }) => {
   const { t } = useTranslation();
+
+  const address = useActiveAccount()
+
+  const { data: poolData } = useReadContract({
+    contract: MandaLinkContract,
+    method: "function pools(uint256) view returns (uint256 price, uint256 numUsers)",
+    params: [BigInt(index)]
+  })
+
+  const { data: userData } = useReadContract({
+    contract: MandaLinkContract,
+    method: "function users(address) view returns (address referrer, uint256 directReferrals, uint256 missedOpportunities, uint256 payedExtra, uint256 totalTree)",
+    params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
+  })
+
+  const { data: poolPositions } = useReadContract({
+    contract: MandaLinkContract,
+    method: "function getPurchases(address userAddress) view returns ((uint256 poolId, uint256 position, bool hasPassed, bool startedInThisPool, bool canContribute)[])",
+    params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
+  })
+
+  const filteredPositions = poolPositions
+    ? poolPositions
+        .filter((positionObj: any) => positionObj.poolId === BigInt(index))
+        .map((positionObj: any) => positionObj.position)
+    : [];
+
   return (
     <div className="w-[45%] lg:w-[20%] flex flex-col items-center justify-center rounded-lg m-2 overflow-visible">
       <div className="w-full h-44 text-2xl font-semibold text-center grey-purple-color rounded-lg px-2 py-4 flex flex-col justify-between relative">
         <div className="absolute flex flex-row top-2 justify-between w-full">
           <div className="w-6 h-6 border border-white flex items-center justify-center text-sm font-semibold rounded-md">
-            <p className="text-white">{index + 1}</p>
+            <p className="text-white">{index}</p>
           </div>
-          <Indicator color={stats.colorIndicator} />
+          <Indicator amount={userData ? Number(userData[1]) : 0} id={index - 1}/>
         </div>
         <div className="absolute inset-0 flex items-center justify-center"></div>
         <div className="mt-8 text-white">
           <div className="text-lg font-normal">{t("landing.totalUsers")}</div>
-          <div className="text-3xl font-bold">{stats.totalUsers}</div>
+          <div className="text-3xl font-bold">{poolData ? poolData[1].toString() : "0"}</div>
         </div>
       </div>
-      <CustomSelect options={stats.positionOptions} />
-      <div className="mt-2 grey-purple-color active:bg-opacity-80 text-white text-base rounded-md px-2 py-1 w-full flex items-center justify-center">
-        <span className="mr-1">{t("landing.paid")}</span> {stats.paid}
-      </div>
+      <CustomSelect options={filteredPositions} />
     </div>
   );
 };
 
 const StatisticsSection: React.FC<StatisticsSectionProps> = ({ stats }) => {
   const { t } = useTranslation();
+
   return (
     <div className="StatisticsSection mt-20 flex flex-col items-center">
       <h1 className="w-full text-2xl font-bold mb-4 flex flex-col items-start">
@@ -151,7 +184,7 @@ const StatisticsSection: React.FC<StatisticsSectionProps> = ({ stats }) => {
       </h1>
       <div className="flex flex-wrap justify-center">
         {stats.map((stat, index) => (
-          <StatisticsCard key={index} stats={stat} index={index} />
+          <StatisticsCard key={index} stats={stat} index={index + 1} />
         ))}
       </div>
     </div>

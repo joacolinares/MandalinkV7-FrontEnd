@@ -1,6 +1,8 @@
+import { MandaLinkContract } from "@/utils/contracts";
 import { showSuccessAlert } from "@/utils/notifications";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { useActiveAccount, useReadContract } from "thirdweb/react";
 
 interface Referral {
   level: number;
@@ -21,6 +23,14 @@ interface ReferralsProps {
 
 const Referrals: React.FC<ReferralsProps> = ({ data }) => {
   const { t } = useTranslation();
+  const address = useActiveAccount()
+
+  const { data: userData } = useReadContract({
+    contract: MandaLinkContract,
+    method: "function users(address) view returns (address referrer, uint256 directReferrals, uint256 missedOpportunities, uint256 payedExtra, uint256 totalTree)",
+    params: address ? [address.address] : ["0xC14cf4f69b9800bb99D1b8770E250243E7d9D254"]
+  })
+
   const { totalReferrals, investmentLink, referrals } = data;
 
   // Calculate total referral investment
@@ -47,7 +57,7 @@ const Referrals: React.FC<ReferralsProps> = ({ data }) => {
       </h1>
       <div className="text-xl  flex flex-col items-center gap-2 mb-2">
         <span>{t("landing.totalReferred")}</span>
-        <span className="text-2xl font-bold">{totalReferrals}</span>
+        <span className="text-2xl font-bold">{userData ? Number(userData[1]): 0}</span>
       </div>
       <div className="flex flex-col w-full ">
         {referrals.map((referral) => (
@@ -109,18 +119,22 @@ const Referrals: React.FC<ReferralsProps> = ({ data }) => {
           <span className="font-bold">{totalReferralInvestment}</span>
         </div>
 
-        <div className=" grey-purple-color rounded px-2 py-1 w-full mt-2 max-h-20 overflow-y-auto break-words">
-          {investmentLink}
-        </div>
+        {address &&
+          <>
+            <div className=" grey-purple-color rounded px-2 py-1 w-full mt-2 max-h-20 overflow-y-auto break-words">
+              {investmentLink}
+            </div>
 
-        <div className="flex justify-center mt-4">
-          <button
-            className="text-center grey-purple-color text-white rounded px-4 py-2 hover:outline outline-1"
-            onClick={handleCopy}
-          >
-            {t("landing.copy")}
-          </button>
-        </div>
+            <div className="flex justify-center mt-4">
+              <button
+                className="text-center grey-purple-color text-white rounded px-4 py-2 hover:outline outline-1"
+                onClick={handleCopy}
+              >
+                {t("landing.copy")}
+              </button>
+            </div>
+          </>
+        }
       </div>
     </div>
   );

@@ -10,20 +10,46 @@ import PushFund from "@/sections/PushFund";
 import engFlag from "@/assets/icons/eng.png";
 import espFlag from "@/assets/icons/esp.png";
 
-import { ConnectButton } from "thirdweb/react";
+import { ConnectButton, useActiveAccount, useReadContract } from "thirdweb/react";
 import { client } from "@/client";
+import { MandaLinkAddress, MandaLinkContract, USDTContract } from "@/utils/contracts";
+import { chain } from "@/chain";
 
 //En Landing.tsx se llaman los datos necesarios y se le pasan a los componentes, si se debe armar un objeto o un array de objetos, se hace aquí y se le pasa a los demás componentes que muestran esa información
 export function Landing() {
+  const address = useActiveAccount()
+
   const { t, i18n } = useTranslation();
 
-  //Estos son los datos que se van a mostrar en el main section
-  const [wallet, setWallet] = useState(100);
-  const [earnings, setEarnings] = useState(20);
-  const [commissions, setCommissions] = useState(30);
-  const [tlv, setTlv] = useState(1000);
-  const [totalInvested, setTotalInvested] = useState(2000);
-  const [distributed, setDistributed] = useState(1500);
+  const { data: walletBalance } = useReadContract({
+    contract: USDTContract,
+    method: "function balanceOf(address account) view returns (uint256)",
+    params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
+  }) 
+
+  const { data: user } = useReadContract({
+    contract: MandaLinkContract,
+    method: "function users(address) view returns (address referrer, uint256 directReferrals, uint256 missedOpportunities, uint256 payedExtra, uint256 totalTree)",
+    params: address ? [address.address] : ["0xC14cf4f69b9800bb99D1b8770E250243E7d9D254"]
+  })
+
+  const { data: contractBalance } = useReadContract({
+    contract: USDTContract,
+    method: "function balanceOf(address account) view returns (uint256)",
+    params: [MandaLinkAddress]
+  })
+
+  const { data: totalInvested } = useReadContract({
+    contract: MandaLinkContract,
+    method: "function totalPayed() view returns (uint256)",
+    params: []
+  });
+
+  const { data: distributed } = useReadContract({
+    contract: MandaLinkContract,
+    method: "function totalDistributed() view returns (uint256)",
+    params: []
+  });
   //Estos son los datos que se van a mostrar en statistics section
   const [totalUsers, setTotalUsers] = useState({
     totalUsersPosition1: 100,
@@ -127,7 +153,7 @@ export function Landing() {
   const referralData = {
     totalReferrals: 10,
     investmentLink:
-      "https://www.mandalik.io/?REF=0x70uhdz74yfzO3hewq3puqy3p29ulpdu",
+      `https://www.mandalik.io/?REF=${address?.address}`,
     referrals: [
       {
         level: 1,
@@ -178,12 +204,12 @@ export function Landing() {
   const [contractAddress, setContractAddress] = useState("0x0000000000000000");
 
   const mainSectionData = {
-    initialWallet: wallet,
-    initialEarnings: earnings,
-    initialCommissions: commissions,
-    initialTlv: tlv,
-    totalInvested: totalInvested,
-    distributed: distributed,
+    initialWallet: Number(walletBalance) / 10**6,
+    initialEarnings: user ? Number(user[3]) : 0,
+    initialCommissions: user ? Number(user[4]) : 0,
+    initialTlv: Number(contractBalance) / 10**6,
+    totalInvested: Number(totalInvested) / 10**6,
+    distributed: Number(distributed) / 10**6,
   };
 
   // Opciones para el select de lenguaje
@@ -234,6 +260,7 @@ export function Landing() {
           <div className="flex gap-2">
             <ConnectButton
               client={client}
+              chain={chain}
               connectButton={{
                 label: t("landing.connectWallet"),
                 className:
