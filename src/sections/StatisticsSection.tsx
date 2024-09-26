@@ -80,7 +80,7 @@ const CustomSelect: React.FC<{ options: string[] }> = ({ options }) => {
         <div className="fixed inset-0 bg-black !text-gray-600 bg-opacity-50 flex justify-center items-center z-50">
           <div
             ref={modalRef}
-            className="bg-c-violet-2 text-white rounded-lg p-4 m-4 h-96 w-96 outline outline-1 outline-white"
+            className="bg-c-violet-2 text-white rounded-lg p-4 m-4 h-96 w-96"
           >
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-bold text-white">
@@ -93,7 +93,7 @@ const CustomSelect: React.FC<{ options: string[] }> = ({ options }) => {
                 &#x2715;
               </button>
             </div>
-            <div className="h-[90%]  overflow-y-scroll">
+            <div className="h-[90%]  overflow-y-auto">
               {options?.map((option, index) => (
                 <div
                   key={index}
