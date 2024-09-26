@@ -8,10 +8,9 @@ export default {
     earnings: "Earnings",
     commissions: "Commissions",
     // ------------------------------------------------
-    availableForWithdrawal: "Available for withdrawal",
+    availableForWithdrawal: "General data",
     totalInvested: "Total invested",
     totalDistributed: "Total distributed",
-    withdraw: "Withdraw",
     // ------------------------------------------------
     selectPool: "Select pool",
     buyPosition: "Buy position",
@@ -21,6 +20,7 @@ export default {
     position: "Position",
     paid: "Paid",
     list: "List",
+    noPositions: "No positions",
     // ------------------------------------------------
     referred: "Referred",
     totalReferred: "Total referred",

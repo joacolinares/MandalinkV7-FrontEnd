@@ -2,12 +2,17 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { IoPaperPlane } from "react-icons/io5";
 import { FaTelegram } from "react-icons/fa";
-interface PushFundProps {
-  contractAddress: string;
-}
+import { MandaLinkAddress, USDTContract } from "@/utils/contracts";
+import { useReadContract } from "thirdweb/react";
 
-const PushFund: React.FC<PushFundProps> = ({ contractAddress }) => {
+const PushFund: React.FC = () => {
   const { t } = useTranslation();
+
+  const { data: contractBalance } = useReadContract({
+    contract: USDTContract,
+    method: "function balanceOf(address account) view returns (uint256)",
+    params: [MandaLinkAddress]
+  }) 
 
   return (
     <div className="PushFund mt-20 flex flex-col items-center">
@@ -20,22 +25,16 @@ const PushFund: React.FC<PushFundProps> = ({ contractAddress }) => {
         </div>
         <div className="flex  flex-col w-full items-center">
           <div
-            className="cursor-pointer px-2 text-center py-1 w-full mt-2 max-h-20 overflow-y-auto break-words"
-            onClick={() =>
-              window.open(
-                `https://etherscan.io/address/${contractAddress}`,
-                "_blank"
-              )
-            }
+            className="px-2 text-center py-1 w-full mt-2 max-h-20 overflow-y-auto break-words font-bold"
           >
-            {contractAddress}
+            {Number(contractBalance) / 10**6} USDT
           </div>
         </div>
       </div>
 
       <div className="w-full flex mt-8 justify-between items-center">
         <a
-          href="https://example.com"
+          href={`https://polygonscan.com/address/${MandaLinkAddress}`}
           target="_blank"
           rel="noopener noreferrer"
           className="text-lg mb-2 cursor-pointer"
@@ -43,7 +42,7 @@ const PushFund: React.FC<PushFundProps> = ({ contractAddress }) => {
           {t("landing.contractAddress")}
         </a>
         <a
-          href="https://example.com"
+          href="https://telegram.org"
           target="_blank"
           rel="noopener noreferrer"
           className="text-lg mb-2 cursor-pointer"
