@@ -94,23 +94,18 @@ const CustomSelect: React.FC<{ options: string[] }> = ({ options }) => {
               </button>
             </div>
             <div className="h-[90%]  overflow-y-scroll">
-              {options
-                .concat(options)
-                .concat(options)
-                .concat(options)
-                .concat(options)
-                .map((option, index) => (
-                  <div
-                    key={index}
-                    className="p-2 hover:bg-gray-100 hover:rounded-md hover:bg-opacity-10"
-                    onClick={() => {
-                      setSelectedIndex(index);
-                      setIsOpen(false);
-                    }}
-                  >
-                    {option}
-                  </div>
-                ))}
+              {options?.map((option, index) => (
+                <div
+                  key={index}
+                  className="p-2 hover:bg-gray-100 hover:rounded-md hover:bg-opacity-10"
+                  onClick={() => {
+                    setSelectedIndex(index);
+                    setIsOpen(false);
+                  }}
+                >
+                  {option}
+                </div>
+              ))}
             </div>
           </div>
         </div>
