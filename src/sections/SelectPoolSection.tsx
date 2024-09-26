@@ -1,9 +1,11 @@
 import { MandaLinkAddress, MandaLinkContract, USDTContract } from "@/utils/contracts";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { prepareContractCall, sendTransaction } from "thirdweb";
-import { useActiveAccount, useReadContract } from "thirdweb/react";
+import { prepareContractCall, sendTransaction, waitForReceipt } from "thirdweb";
+import { useActiveAccount, useReadContract, useSendTransaction, useWaitForReceipt } from "thirdweb/react";
 import { approve } from "thirdweb/extensions/erc20";
+import { client } from "@/client";
+import { chain } from "@/chain";
 
 //Recibe valor y moneda en este formato "50 USDT", separa eso en partes y las muestra
 const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
@@ -13,17 +15,33 @@ const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
 
   const [ referral, setReferral ] = useState<string | null>("")
 
-  const handleJoinPool = async (id: number) => {
+  const { data: user } = useReadContract({
+    contract: MandaLinkContract,
+    method: "function users(address) view returns (address referrer, uint256 directReferrals, uint256 missedOpportunities, uint256 payedExtra, uint256 totalTree)",
+    params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
+  })
 
-    const handleTransaction = async (ref: string) => {
-      if (address) {
+  const handleTransaction = async (ref: string) => {
+    if (address) {
+      try {
         const app = await approve({
           contract: USDTContract,
           spender: MandaLinkAddress,
           amount: Number(value)
         })
 
-        await sendTransaction({ transaction: app, account: address })
+        const { transactionHash: approveHash } = await sendTransaction({
+          transaction: app,
+          account: address
+        });
+
+        const approveReceipt = await waitForReceipt({
+          client: client,
+          chain: chain,
+          transactionHash: approveHash
+        })
+
+        console.log(approveReceipt)
 
         const transaction = prepareContractCall({
           contract: MandaLinkContract,
@@ -31,30 +49,33 @@ const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
           params: [BigInt(id + 1), ref, address.address]
         })
 
-        const { transactionHash } = await sendTransaction({
+        const { transactionHash: joinPoolHash } = await sendTransaction({
           transaction,
           account: address
         })
 
-        console.log(transactionHash)
+        const joinPoolReceipt = await waitForReceipt({
+          client: client,
+          chain: chain,
+          transactionHash: joinPoolHash
+        })
+
+        console.log(joinPoolReceipt)
+
+      } catch (error) {
+        console.log(error)
       }
     }
+  }
 
-    if (address) {
-      const { data: user } = useReadContract({
-        contract: MandaLinkContract,
-        method: "function users(address) view returns (address referrer, uint256 directReferrals, uint256 missedOpportunities, uint256 payedExtra, uint256 totalTree)",
-        params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
-      })
-      
-      if (user && user[0]) {
-        handleTransaction("0x0000000000000000000000000000000000000000")
+  const handleJoinPool = async (id: number) => {
+    if (user && user[0]) {
+      handleTransaction("0x0000000000000000000000000000000000000000")
+    } else {
+      if (referral) {
+        handleTransaction(referral)
       } else {
-        if (referral) {
-          handleTransaction(referral)
-        } else {
-          alert("Por favor ingrese con un link de referido")
-        }
+        alert("Por favor ingrese con un link de referido")
       }
     }
   }
