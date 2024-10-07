@@ -34,14 +34,23 @@ body {
 }
 
 .grey-purple-color {
-    background: linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), 
-                linear-gradient(0deg, rgba(134, 48, 138, 0.3), rgba(134, 48, 138, 0.3));
+  /* background-color: #866E88; */
+   background: linear-gradient(50deg, #926e96, #866E88);
+    /* background: linear-gradient(0deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), 
+                linear-gradient(0deg, rgba(134, 48, 138, 0.3), rgba(134, 48, 138, 0.3)); */
 
 }
 
 .grey-purple-color:hover {
-    background: linear-gradient(0deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.24)), 
-                linear-gradient(0deg, rgba(134, 48, 138, 0.24), rgba(134, 48, 138, 0.24)); 
+   /*  background-color: #866E8896;  */
+   /*  
+   background: linear-gradient(0deg, #866E8896, #8d699196);
+   */
+   background: linear-gradient(0deg, #926e9696, #866E8896);
+   /* 
+   background: linear-gradient(0deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.24)), 
+   linear-gradient(0deg, rgba(134, 48, 138, 0.24), rgba(134, 48, 138, 0.24)); 
+   */
 }
 
 ::-webkit-scrollbar {

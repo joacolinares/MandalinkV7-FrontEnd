@@ -51,7 +51,9 @@ const Referrals: React.FC<ReferralsProps> = ({ data }) => {
       </h1>
       <div className="text-xl  flex flex-col items-center gap-2 mb-2">
         <span>{t("landing.totalReferred")}</span>
-        <span className="text-2xl font-bold">{userData ? Number(userData[1]): 0}</span>
+        <span className="text-2xl font-bold">
+          {userData ? Number(userData[1]) : 0}
+        </span>
       </div>
       <div className="flex flex-col w-full ">
         {referrals.map((referral) => (
@@ -110,10 +112,12 @@ const Referrals: React.FC<ReferralsProps> = ({ data }) => {
           <span className="font-bold">
             {t("landing.totalReferralInvestment")}
           </span>
-          <span className="font-bold">{userData ? Number(userData[4]) / 10**6 : 0} USDT</span>
+          <span className="font-bold">
+            {userData ? Number(userData[4]) / 10 ** 6 : 0} USDT
+          </span>
         </div>
 
-        {address &&
+        {address && (
           <>
             <div className=" grey-purple-color rounded px-2 py-1 w-full mt-2 max-h-20 overflow-y-auto break-words">
               {investmentLink}
@@ -128,7 +132,7 @@ const Referrals: React.FC<ReferralsProps> = ({ data }) => {
               </button>
             </div>
           </>
-        }
+        )}
       </div>
     </div>
   );
