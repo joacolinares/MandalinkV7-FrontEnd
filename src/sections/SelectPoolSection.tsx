@@ -62,6 +62,8 @@ const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
 
         console.log(joinPoolReceipt)
 
+        window.location.reload();
+
       } catch (error) {
         console.log(error)
       }
