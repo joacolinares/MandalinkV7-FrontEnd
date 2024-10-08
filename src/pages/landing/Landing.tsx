@@ -268,11 +268,12 @@ export function Landing() {
   ];
 
   const totalMoneyCollected = referralLevels.reduce((acc, level) => acc + level.money, 0);
+  const totalPeople = referralLevels.reduce((acc, level) => acc + level.people, 0);
 
   const referralData = {
-    totalReferrals: referralLevels.reduce((acc, level) => acc + level.people, 0),
-    totalMoneyCollected: totalMoneyCollected,
-    investmentLink: `https://www.mandalik.io/?REF=${address?.address}`,
+    totalReferrals: totalPeople, // Total de personas de todos los niveles
+    totalMoneyCollected: totalMoneyCollected, // Suma total del dinero recaudado por todos los niveles
+    investmentLink: `https://mandalink-v4.vercel.app/?REF=${address?.address}`,
     referrals: referralLevels.map((level, index) => ({
       level: index + 1,
       percentage:
@@ -286,7 +287,7 @@ export function Landing() {
           ? "1%"
           : "2%", // Ajusta el porcentaje por nivel
       people: level.people, // Cantidad de personas en el nivel
-      money: level.money, // Cantidad de dinero en el nivel
+      money: level.money,   // Cantidad de dinero en el nivel
       downloadLink: `https://example.com/download${index + 1}`,
     })),
   };

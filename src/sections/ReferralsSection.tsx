@@ -37,7 +37,7 @@ const Referrals: React.FC<any> = ({ data }) => {
 
   
 
-  const { investmentLink, referrals } = data;
+  const { investmentLink, referrals,totalReferrals } = data;
 
   const handleCopy = () => {
     navigator.clipboard
@@ -58,7 +58,7 @@ const Referrals: React.FC<any> = ({ data }) => {
       <div className="text-xl  flex flex-col items-center gap-2 mb-2">
         <span>{t("landing.totalReferred")}</span>
         <span className="text-2xl font-bold">
-          {userData ? Number(userData[1]) : 0}
+          {userData ? totalReferrals : 0}
         </span>
       </div>
       <div className="flex flex-col w-full ">
