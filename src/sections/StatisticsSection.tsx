@@ -55,7 +55,7 @@ const CustomSelect: React.FC<{ options: string[] }> = ({ options }) => {
 
   return (
     <>
-      <div className="mt-2 grey-purple-color text-white text-base px-2 py-1 w-full rounded-md flex items-center justify-between hover:outline hover:outline-1 hover:outline-white">
+      <div className="mt-2 bg-[#632667] text-white text-base px-2 py-1 w-full rounded-md flex items-center justify-between hover:outline hover:outline-1 hover:outline-white">
         <div className="flex flex-col my-1">
           <button
             onClick={() => handleChange("up")}
@@ -155,7 +155,7 @@ const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
 
   return (
     <div className="w-[45%] lg:w-[20%] flex flex-col items-center justify-center rounded-lg m-2 overflow-visible">
-      <div className="w-full h-44 text-2xl font-semibold text-center grey-purple-color rounded-lg px-2 py-4 flex flex-col justify-between relative">
+      <div className="w-full h-44 text-2xl font-semibold text-center bg-[#632667] rounded-lg px-2 py-4 flex flex-col justify-between relative">
         <div className="absolute flex flex-row top-2 justify-between w-full">
           <div className="w-6 h-6 border border-white flex items-center justify-center text-sm font-semibold rounded-md">
             <p className="text-white">{index}</p>

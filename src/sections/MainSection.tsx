@@ -28,11 +28,11 @@ const MainSection = ({
 
       <div className="w-full flex flex-col items-center justify-center mt-10">
         <div className="w-full flex flex-row justify-between gap-4">
-          <button className="grey-purple-color text-white font-light rounded-md  items-center flex flex-row gap-2 hover:!bg-opacity-80 px-2 py-1.5 hover:outline outline-1">
+          <button className="bg-[#632667] text-white font-light rounded-md  items-center flex flex-row gap-2 hover:!bg-opacity-80 px-2 py-1.5 hover:outline outline-1">
             <IoDocumentTextOutline className="w-6 h-6" />
             <span className="text-md">{t("landing.downloadHereEnglish")}</span>
           </button>
-          <button className="grey-purple-color text-white font-light rounded-md  items-center flex flex-row gap-2 hover:!bg-opacity-80 px-2 py-1.5 hover:outline outline-1">
+          <button className="bg-[#632667] text-white font-light rounded-md  items-center flex flex-row gap-2 hover:!bg-opacity-80 px-2 py-1.5 hover:outline outline-1">
             <IoDocumentTextOutline className="w-6 h-6" />
             <span className="text-md">{t("landing.downloadHereSpanish")}</span>
           </button>

@@ -95,7 +95,7 @@ const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
 
   return (
     <div className="w-[45%] lg:w-[20%] flex flex-col items-center justify-center rounded-lg m-2 overflow-visible">
-      <div className="w-full h-44 text-2xl font-semibold text-center grey-purple-color rounded-lg px-2 py-4 flex flex-col justify-between relative">
+      <div className="w-full h-44 text-2xl font-semibold text-center bg-[#632667] rounded-lg px-2 py-4 flex flex-col justify-between relative">
         <div className="absolute flex flex-row top-2 justify-between w-full">
           <div className="w-6 h-6 border border-white flex items-center justify-center text-sm font-semibold rounded-md">
             <p className="text-white">{id + 1}</p>
@@ -109,7 +109,7 @@ const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
       </div>
       {address && (
         <button
-          className="mt-2 grey-purple-color text-white text-base rounded-md px-2 py-1 w-full min-h-10 shadow-md hover:!bg-opacity-80 hover:outline outline-1"
+          className="mt-2 bg-[#632667] text-white text-base rounded-md px-2 py-1 w-full min-h-10 shadow-md hover:!bg-opacity-80 hover:outline outline-1"
           onClick={() => handleJoinPool(id)}
         >
           {t("landing.buyPosition")}

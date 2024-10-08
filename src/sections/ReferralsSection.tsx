@@ -74,10 +74,10 @@ const Referrals: React.FC<any> = ({ data }) => {
               <span style={{display:"inline-block"}} className="mr-3 font-bold">{t("landing.people")} {referral.people}</span>
               <span style={{display:"inline-block"}} className="mr-3 font-bold">{t("landing.money")} {referral.money / 1000000}$</span>
 
-              <div className="flex items-center">
+              {/*<div className="flex items-center">
                 <a
                   href={referral.downloadLink}
-                  className="text-white font-light text-xs grey-purple-color rounded px-2 py-1 flex items-center hover:outline outline-1"
+                  className="text-white font-light text-xs bg-[#632667] rounded px-2 py-1 flex items-center hover:outline outline-1"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -109,7 +109,7 @@ const Referrals: React.FC<any> = ({ data }) => {
                     />
                   </svg>
                 </a>
-              </div>
+              </div>*/}
             </div>
           </div>
         ))}
@@ -126,13 +126,13 @@ const Referrals: React.FC<any> = ({ data }) => {
 
         {address && (
           <>
-            <div className=" grey-purple-color rounded px-2 py-1 w-full mt-2 max-h-20 overflow-y-auto break-words">
+            <div className=" bg-[#632667] rounded px-2 py-1 w-full mt-2 max-h-20 overflow-y-auto break-words">
               {investmentLink}
             </div>
 
             <div className="flex justify-center mt-4">
               <button
-                className="text-center grey-purple-color text-white rounded px-4 py-2 hover:outline outline-1"
+                className="text-center bg-[#632667] text-white rounded px-4 py-2 hover:outline outline-1"
                 onClick={handleCopy}
               >
                 {t("landing.copy")}
