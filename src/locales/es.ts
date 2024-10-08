@@ -26,8 +26,10 @@ export default {
     totalReferred: "Total de referidos",
     level: "Nivel",
     download: "Descargar",
-    totalReferralInvestment: "Inversión total de referencia",
+    totalReferralInvestment: "Total recaudado por inversion de mis referidos",
     copy: "Copiar",
+    people: "Personas",
+    money: "Dinero recaudado",
     // ------------------------------------------------
     pushFund: "Aportar fondos",
     totalPushFunds: "Total de fondos aportados",

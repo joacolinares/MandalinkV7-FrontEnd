@@ -1,11 +1,13 @@
 import { MandaLinkContract } from "@/utils/contracts";
 import { showSuccessAlert } from "@/utils/notifications";
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useActiveAccount, useReadContract } from "thirdweb/react";
 
 interface Referral {
   level: number;
+  money: number;
+  people: number;
   percentage: string;
   value: number;
   downloadLink: string;
@@ -21,7 +23,7 @@ interface ReferralsProps {
   data: ReferralData;
 }
 
-const Referrals: React.FC<ReferralsProps> = ({ data }) => {
+const Referrals: React.FC<any> = ({ data }) => {
   const { t } = useTranslation();
   const address = useActiveAccount()
 
@@ -30,6 +32,10 @@ const Referrals: React.FC<ReferralsProps> = ({ data }) => {
     method: "function users(address) view returns (address referrer, uint256 directReferrals, uint256 missedOpportunities, uint256 payedExtra, uint256 totalTree)",
     params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
   })
+
+
+
+  
 
   const { investmentLink, referrals } = data;
 
@@ -56,7 +62,7 @@ const Referrals: React.FC<ReferralsProps> = ({ data }) => {
         </span>
       </div>
       <div className="flex flex-col w-full ">
-        {referrals.map((referral) => (
+        {referrals.map((referral: any) => (
           <div
             key={referral.level}
             className="flex justify-between items-center py-2"
@@ -65,7 +71,8 @@ const Referrals: React.FC<ReferralsProps> = ({ data }) => {
               referral.percentage
             }`}</div>
             <div className="flex items-center">
-              <span className="mr-3 font-bold">{referral.value}</span>
+              <span style={{display:"inline-block"}} className="mr-3 font-bold">{t("landing.people")} {referral.people}</span>
+              <span style={{display:"inline-block"}} className="mr-3 font-bold">{t("landing.money")} {referral.money / 1000000}$</span>
 
               <div className="flex items-center">
                 <a

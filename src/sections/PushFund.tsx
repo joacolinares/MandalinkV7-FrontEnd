@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { IoPaperPlane } from "react-icons/io5";
 import { FaTelegram } from "react-icons/fa";
-import { MandaLinkAddress, USDTContract } from "@/utils/contracts";
+import { MandaLinkAddress, USDTContract,PaymentAddress } from "@/utils/contracts";
 import { useReadContract } from "thirdweb/react";
 
 const PushFund: React.FC = () => {
@@ -11,7 +11,7 @@ const PushFund: React.FC = () => {
   const { data: contractBalance } = useReadContract({
     contract: USDTContract,
     method: "function balanceOf(address account) view returns (uint256)",
-    params: [MandaLinkAddress]
+    params: [PaymentAddress]
   }) 
 
   return (

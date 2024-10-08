@@ -71,10 +71,13 @@ const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
   }
 
   const handleJoinPool = async (id: number) => {
-    if (user && user[0]) {
+    if (user && user[0] != "0x0000000000000000000000000000000000000000") {
+      console.log("Ya compro y tiene referido puesto en contrato")
       handleTransaction("0x0000000000000000000000000000000000000000")
     } else {
       if (referral) {
+        console.log("NO compro y NO tiene referido puesto en contrato")
+        console.log("Le compra poniendo el referido: ", referral)
         handleTransaction(referral)
       } else {
         alert("Por favor ingrese con un link de referido")

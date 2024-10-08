@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Main from "../../sections/MainSection";
 import SelectPoolSection from "../../sections/SelectPoolSection";
@@ -12,7 +12,7 @@ import espFlag from "@/assets/icons/esp.png";
 
 import { ConnectButton, useActiveAccount, useReadContract } from "thirdweb/react";
 import { client } from "@/client";
-import { MandaLinkAddress, MandaLinkContract, USDTContract } from "@/utils/contracts";
+import { MandaLinkAddress, MandaLinkContract, USDTContract,PaymentAddress,MandaLinkContract2 } from "@/utils/contracts";
 import { chain } from "@/chain";
 
 //En Landing.tsx se llaman los datos necesarios y se le pasan a los componentes, si se debe armar un objeto o un array de objetos, se hace aquí y se le pasa a los demás componentes que muestran esa información
@@ -36,7 +36,7 @@ export function Landing() {
   const { data: contractBalance } = useReadContract({
     contract: USDTContract,
     method: "function balanceOf(address account) view returns (uint256)",
-    params: [MandaLinkAddress]
+    params: [PaymentAddress]
   })
 
   const { data: totalInvested } = useReadContract({
@@ -50,6 +50,123 @@ export function Landing() {
     method: "function totalDistributed() view returns (uint256)",
     params: []
   });
+
+  //BUSAR MANERA DE HACER OPTIMIZADO, NO PUDE HACERLO YA QUE DENTRO DE USEEFFECT NO ME DEJA USAR HOOKS
+  const { data: infoLevel1 } =  useReadContract({
+    contract: MandaLinkContract2,
+    method: "referralsByLevel",
+    params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(0)],
+  });
+  const { data: infoLevel2 } =  useReadContract({
+    contract: MandaLinkContract2,
+    method: "referralsByLevel",
+    params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(1)],
+  });
+  const { data: infoLevel3 } =  useReadContract({
+    contract: MandaLinkContract2,
+    method: "referralsByLevel",
+    params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(2)],
+  });
+  const { data: infoLevel4 } =  useReadContract({
+    contract: MandaLinkContract2,
+    method: "referralsByLevel",
+    params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(3)],
+  });
+  const { data: infoLevel5 } =  useReadContract({
+    contract: MandaLinkContract2,
+    method: "referralsByLevel",
+    params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(4)],
+  });
+  const { data: infoLevel6 } =  useReadContract({
+    contract: MandaLinkContract2,
+    method: "referralsByLevel",
+    params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(5)],
+  });
+  const { data: infoLevel7 } =  useReadContract({
+    contract: MandaLinkContract2,
+    method: "referralsByLevel",
+    params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(6)],
+  });
+
+
+  const { data: infoLevel1Money } =  useReadContract({
+    contract: MandaLinkContract2,
+    method: "amountInvestInLevels",
+    params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(0)],
+  });
+  const { data: infoLevel2Money } =  useReadContract({
+    contract: MandaLinkContract2,
+    method: "amountInvestInLevels",
+    params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(1)],
+  });
+  const { data: infoLevel3Money } =  useReadContract({
+    contract: MandaLinkContract2,
+    method: "amountInvestInLevels",
+    params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(2)],
+  });
+  const { data: infoLevel4Money } =  useReadContract({
+    contract: MandaLinkContract2,
+    method: "amountInvestInLevels",
+    params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(3)],
+  });
+  const { data: infoLevel5Money } =  useReadContract({
+    contract: MandaLinkContract2,
+    method: "amountInvestInLevels",
+    params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(4)],
+  });
+  const { data: infoLevel6Money } =  useReadContract({
+    contract: MandaLinkContract2,
+    method: "amountInvestInLevels",
+    params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(5)],
+  });
+  const { data: infoLevel7Money } =  useReadContract({
+    contract: MandaLinkContract2,
+    method: "amountInvestInLevels",
+    params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(6)],
+  });
+
+
+
+  const [referralLevels, setReferralLevels] = useState<any[]>([]);
+
+  // UseEffect para almacenar los valores en referralLevels
+  useEffect(() => {
+    const levels = [
+      {
+        people: infoLevel1 ? Number(infoLevel1) : 0,
+        money: infoLevel1Money ? Number(infoLevel1Money) : 0,
+      },
+      {
+        people: infoLevel2 ? Number(infoLevel2) : 0,
+        money: infoLevel2Money ? Number(infoLevel2Money) : 0,
+      },
+      {
+        people: infoLevel3 ? Number(infoLevel3) : 0,
+        money: infoLevel3Money ? Number(infoLevel3Money) : 0,
+      },
+      {
+        people: infoLevel4 ? Number(infoLevel4) : 0,
+        money: infoLevel4Money ? Number(infoLevel4Money) : 0,
+      },
+      {
+        people: infoLevel5 ? Number(infoLevel5) : 0,
+        money: infoLevel5Money ? Number(infoLevel5Money) : 0,
+      },
+      {
+        people: infoLevel6 ? Number(infoLevel6) : 0,
+        money: infoLevel6Money ? Number(infoLevel6Money) : 0,
+      },
+      {
+        people: infoLevel7 ? Number(infoLevel7) : 0,
+        money: infoLevel7Money ? Number(infoLevel7Money) : 0,
+      },
+    ];
+  
+    setReferralLevels(levels);
+  }, [infoLevel1, infoLevel2, infoLevel3, infoLevel4, infoLevel5, infoLevel6, infoLevel7, infoLevel1Money, infoLevel2Money, infoLevel3Money, infoLevel4Money, infoLevel5Money, infoLevel6Money, infoLevel7Money]);
+  
+
+
   //Estos son los datos que se van a mostrar en statistics section
   const [totalUsers, setTotalUsers] = useState({
     totalUsersPosition1: 100,
@@ -150,55 +267,31 @@ export function Landing() {
     },
   ];
 
+  const totalMoneyCollected = referralLevels.reduce((acc, level) => acc + level.money, 0);
+
   const referralData = {
-    totalReferrals: 10,
-    investmentLink:
-      `https://www.mandalik.io/?REF=${address?.address}`,
-    referrals: [
-      {
-        level: 1,
-        percentage: "10%",
-        value: 10,
-        downloadLink: "https://example.com/download1",
-      },
-      {
-        level: 2,
-        percentage: "3%",
-        value: 20,
-        downloadLink: "https://example.com/download2",
-      },
-      {
-        level: 3,
-        percentage: "2%",
-        value: 30,
-        downloadLink: "https://example.com/download3",
-      },
-      {
-        level: 4,
-        percentage: "1%",
-        value: 40,
-        downloadLink: "https://example.com/download4",
-      },
-      {
-        level: 5,
-        percentage: "1%",
-        value: 50,
-        downloadLink: "https://example.com/download5",
-      },
-      {
-        level: 6,
-        percentage: "1%",
-        value: 60,
-        downloadLink: "https://example.com/download6",
-      },
-      {
-        level: 7,
-        percentage: "2%",
-        value: 70,
-        downloadLink: "https://example.com/download7",
-      },
-    ],
+    totalReferrals: referralLevels.reduce((acc, level) => acc + level.people, 0),
+    totalMoneyCollected: totalMoneyCollected,
+    investmentLink: `https://www.mandalik.io/?REF=${address?.address}`,
+    referrals: referralLevels.map((level, index) => ({
+      level: index + 1,
+      percentage:
+        index === 0
+          ? "10%"
+          : index === 1
+          ? "3%"
+          : index === 2
+          ? "2%"
+          : index === 3 || index === 4 || index === 5
+          ? "1%"
+          : "2%", // Ajusta el porcentaje por nivel
+      people: level.people, // Cantidad de personas en el nivel
+      money: level.money, // Cantidad de dinero en el nivel
+      downloadLink: `https://example.com/download${index + 1}`,
+    })),
   };
+
+  console.log(referralData)
 
   const mainSectionData = {
     initialWallet: Number(walletBalance) / 10**6,
