@@ -2,120 +2,170 @@ import { MandaLinkAddress, MandaLinkContract, USDTContract } from "@/utils/contr
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { prepareContractCall, sendTransaction, waitForReceipt } from "thirdweb";
-import { useActiveAccount, useReadContract, useSendTransaction, useWaitForReceipt } from "thirdweb/react";
-import { approve } from "thirdweb/extensions/erc20";
+import { useActiveAccount, useReadContract } from "thirdweb/react";
 import { client } from "@/client";
 import { chain } from "@/chain";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-//Recibe valor y moneda en este formato "50 USDT", separa eso en partes y las muestra
 const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
   const { t } = useTranslation();
+  const address = useActiveAccount();
+  const [referral, setReferral] = useState<string | null>("");
 
-  const address = useActiveAccount()
-
-  const [ referral, setReferral ] = useState<string | null>("")
+  // Estado para manejar la compra
+  const [isProcessing, setIsProcessing] = useState(false);  // Muestra el overlay
+  const [transactionStatus, setTransactionStatus] = useState<"idle" | "processing" | "success" | "error">("idle"); // Muestra el mensaje
 
   const { data: user } = useReadContract({
     contract: MandaLinkContract,
-    method: "function users(address) view returns (address referrer, uint256 directReferrals, uint256 missedOpportunities, uint256 payedExtra, uint256 totalTree)",
+    method: "users",
     params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
-  })
+  });
 
   const handleTransaction = async (ref: string) => {
     if (address) {
       try {
-        const app = await approve({
-          contract: USDTContract,
-          spender: MandaLinkAddress,
-          amount: Number(value)
-        })
+        setIsProcessing(true); // Empieza el proceso
+        setTransactionStatus("processing");
 
-        const { transactionHash: approveHash } = await sendTransaction({
-          transaction: app,
-          account: address
+        // APROVE
+        const approvalToken = prepareContractCall({
+          contract: USDTContract,
+          method: "approve",
+          params: [MandaLinkContract.address, BigInt(300000000000)],
+          gasPrice: BigInt(150000000000)
         });
 
-        const approveReceipt = await waitForReceipt({
+        const { transactionHash: approveHash } = await sendTransaction({
+          transaction: approvalToken,
+          account: address,
+        });
+
+        await waitForReceipt({
           client: client,
           chain: chain,
           transactionHash: approveHash
-        })
+        });
+        console.log("Aprovado")
 
-        console.log(approveReceipt)
-
+        // COMPRA POOL
         const transaction = prepareContractCall({
           contract: MandaLinkContract,
           method: "function joinPool(uint256 poolId, address referrer, address wallet)",
-          params: [BigInt(id + 1), ref, address.address]
+          params: [BigInt(id + 1), ref, address.address],
+          gasPrice: BigInt(200000000000)
         })
 
         const { transactionHash: joinPoolHash } = await sendTransaction({
           transaction,
           account: address
-        })
+        });
 
-        const joinPoolReceipt = await waitForReceipt({
+        await waitForReceipt({
           client: client,
           chain: chain,
           transactionHash: joinPoolHash
-        })
+        });
 
-        console.log(joinPoolReceipt)
+        console.log("Comprado")
 
-        window.location.reload();
+        // Si la compra fue exitosa
+        setTransactionStatus("success");
+        compraExitosa()
+
+        setTimeout(() => {
+          window.location.reload();  // Recarga después de mostrar éxito
+        }, 2000);
 
       } catch (error) {
-        console.log(error)
+        console.error(error);
+        compraError()
+        setTransactionStatus("error"); // En caso de error, muestra el mensaje
+      } finally {
+        setIsProcessing(false); // Detén el proceso
       }
     }
-  }
+  };
 
   const handleJoinPool = async (id: number) => {
     if (user && user[0] != "0x0000000000000000000000000000000000000000") {
-      console.log("Ya compro y tiene referido puesto en contrato")
-      handleTransaction("0x0000000000000000000000000000000000000000")
+      handleTransaction("0x0000000000000000000000000000000000000000");
     } else {
       if (referral) {
-        console.log("NO compro y NO tiene referido puesto en contrato")
-        console.log("Le compra poniendo el referido: ", referral)
-        handleTransaction(referral)
+        handleTransaction(referral);
       } else {
-        alert("Por favor ingrese con un link de referido")
+        alert("Por favor ingrese con un link de referido");
       }
     }
-  }
+  };
 
   const [value, currency] = amount.split(" ");
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
-    setReferral(searchParams.get("REF"))
-    console.log(referral)
-  })
+    setReferral(searchParams.get("REF"));
+  }, []);
+
+
+  const compraExitosa = () => toast.success('Compra realizada con exito', {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    });
+
+  const compraError = () => toast.error('Error en la compra', {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    });
 
   return (
-    <div className="w-[45%] lg:w-[20%] flex flex-col items-center justify-center rounded-lg m-2 overflow-visible">
-      <div className="w-full h-44 text-2xl font-semibold text-center bg-[#632667] rounded-lg px-2 py-4 flex flex-col justify-between relative">
-        <div className="absolute flex flex-row top-2 justify-between w-full">
-          <div className="w-6 h-6 border border-white flex items-center justify-center text-sm font-semibold rounded-md">
-            <p className="text-white">{id + 1}</p>
+    <>
+     <ToastContainer />
+      {isProcessing && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-75 flex justify-center items-center z-50">
+          <div className="text-white text-lg">
+            {transactionStatus === "processing" && "Procesando compra..."}
+            {transactionStatus === "success" && "Compra realizada con éxito"}
+            {transactionStatus === "error" && "Error en la compra"}
           </div>
         </div>
-        <div className="absolute inset-0 flex items-center justify-center"></div>
-        <div className="mt-8 text-white">
-          <div className="text-3xl font-bold">{value}</div>
-          <div className="text-3xl font-bold">{currency}</div>
-        </div>
-      </div>
-      {address && (
-        <button
-          className="mt-2 bg-[#632667] text-white text-base rounded-md px-2 py-1 w-full min-h-10 shadow-md hover:!bg-opacity-80 hover:outline outline-1"
-          onClick={() => handleJoinPool(id)}
-        >
-          {t("landing.buyPosition")}
-        </button>
       )}
-    </div>
+      <div className="w-[45%] lg:w-[20%] flex flex-col items-center justify-center rounded-lg m-2 overflow-visible">
+        <div className="w-full h-44 text-2xl font-semibold text-center bg-[#632667] rounded-lg px-2 py-4 flex flex-col justify-between relative">
+          <div className="absolute flex flex-row top-2 justify-between w-full">
+            <div className="w-6 h-6 border border-white flex items-center justify-center text-sm font-semibold rounded-md">
+              <p className="text-white">{id + 1}</p>
+            </div>
+          </div>
+          <div className="absolute inset-0 flex items-center justify-center"></div>
+          <div className="mt-8 text-white">
+            <div className="text-3xl font-bold">{value}</div>
+            <div className="text-3xl font-bold">{currency}</div>
+          </div>
+        </div>
+        {address && (
+          <button
+            className="mt-2 bg-[#632667] text-white text-base rounded-md px-2 py-1 w-full min-h-10 shadow-md hover:!bg-opacity-80 hover:outline outline-1"
+            onClick={() => handleJoinPool(id)}
+            disabled={isProcessing} // Desactiva el botón durante el procesamiento
+          >
+            {t("landing.buyPosition")}
+          </button>
+        )}
+      </div>
+    </>
   );
 };
 

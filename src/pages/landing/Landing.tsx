@@ -12,17 +12,66 @@ import espFlag from "@/assets/icons/esp.png";
 
 import { ConnectButton, useActiveAccount, useReadContract } from "thirdweb/react";
 import { client } from "@/client";
-import { MandaLinkAddress, MandaLinkContract, USDTContract,PaymentAddress,MandaLinkContract2 } from "@/utils/contracts";
+import { MandaLinkAddress, MandaLinkContract, USDTContract,PaymentAddress,MandaLinkContract2, USDTContract2 } from "@/utils/contracts";
 import { chain } from "@/chain";
+import { createWallet, inAppWallet, smartWallet } from "thirdweb/wallets";
 
 //En Landing.tsx se llaman los datos necesarios y se le pasan a los componentes, si se debe armar un objeto o un array de objetos, se hace aquí y se le pasa a los demás componentes que muestran esa información
 export function Landing() {
+
+  // const wallets = [
+  //   smartWallet({
+  //     chain: chain,
+  //     sponsorGas: true, // enable sponsored transactions
+  //     factoryAddress: "0x15C8D84d83D02BBDe62018105955f896652f2AAd", // custom factory address
+  //    }),
+  //   inAppWallet({
+  //     auth: {
+  //       options: [
+  //         "google",
+  //         "telegram",
+  //         "email",
+  //         "passkey",
+  //         "phone",
+  //         "apple",
+  //         "facebook",
+  //       ],
+  //     },
+  //   }),
+  //   createWallet("io.metamask"),
+  //  // createWallet("com.trustwallet.app"),
+  //  // createWallet("com.binance"),
+  // ];
+
+  const wallets = [
+    inAppWallet({
+      auth: {
+        options: [
+          "google",
+          "discord",
+          "telegram",
+          "farcaster",
+          "email",
+          "x",
+          "passkey",
+          "phone",
+        ],
+      },
+    }),
+    createWallet("io.metamask"),
+    createWallet("com.coinbase.wallet"),
+    createWallet("me.rainbow"),
+    createWallet("io.rabby"),
+    createWallet("io.zerion.wallet"),
+  ];
+
+
   const address = useActiveAccount()
 
   const { t, i18n } = useTranslation();
 
   const { data: walletBalance } = useReadContract({
-    contract: USDTContract,
+    contract: USDTContract2,
     method: "function balanceOf(address account) view returns (uint256)",
     params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
   }) 
@@ -34,7 +83,7 @@ export function Landing() {
   })
 
   const { data: contractBalance } = useReadContract({
-    contract: USDTContract,
+    contract: USDTContract2,
     method: "function balanceOf(address account) view returns (uint256)",
     params: [PaymentAddress]
   })
@@ -349,13 +398,14 @@ export function Landing() {
             />
           </div>
           <div className="flex gap-2">
-            <ConnectButton
+          <ConnectButton
               client={client}
-              chain={chain}
-              connectButton={{
-                label: t("landing.connectWallet"),
-                className:
-                  "!bg-c-violet-2 !bg-opacity-80 hover:!bg-opacity-80 !h-8 !text-white !font-light !py-1 !px-1 !rounded-md !shadow-lg  !transition !text-sm hover:!outline hover:!outline-1 hover:!outline-white",
+              wallets={wallets}
+              connectModal={{ size: "compact" }}
+              accountAbstraction={{
+              factoryAddress: "0xd80E5cA14226aC1a6c2EfcD6483AF972e2E35511",
+                 chain: chain, // replace with the chain you want
+                 sponsorGas: true,
               }}
             />
           </div>

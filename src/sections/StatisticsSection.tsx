@@ -15,10 +15,10 @@ interface StatisticsSectionProps {
   stats: UserStats[];
 }
 
-const Indicator: React.FC<{ amount: number, id: number }> = ({ amount, id }) => (
+const Indicator: React.FC<{ amount: number, id: number, shouldHighlightNextPool: boolean }> = ({ amount, id, shouldHighlightNextPool }) => (
   <div
     className={`w-6 h-6 rounded-full mr-3 ${
-      amount >= id ? "bg-green-500" : "bg-yellow-500"
+      shouldHighlightNextPool || amount >= id ? "bg-green-500" : "bg-yellow-500"
     }`}
   />
 );
@@ -147,11 +147,23 @@ const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
     params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
   })
 
+  console.log(poolPositions)
+
   const filteredPositions = poolPositions
     ? poolPositions
         .filter((positionObj: any) => positionObj.poolId === BigInt(index))
         .map((positionObj: any) => positionObj.position)
     : [];
+
+
+
+    const hasPurchaseInNextPool = poolPositions
+  ? poolPositions.some(
+      (positionObj: any) =>
+        (positionObj.poolId === BigInt(5) && index === 6 && positionObj.startedInThisPool) || // Si compró en pool 5 y empezó en ella, la bolita de pool 6 será verde
+        (positionObj.poolId === BigInt(6) && index === 7 && positionObj.startedInThisPool)    // Si compró en pool 6 y empezó en ella, la bolita de pool 7 será verde
+    )
+  : false;
 
   return (
     <div className="w-[45%] lg:w-[20%] flex flex-col items-center justify-center rounded-lg m-2 overflow-visible">
@@ -160,7 +172,11 @@ const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
           <div className="w-6 h-6 border border-white flex items-center justify-center text-sm font-semibold rounded-md">
             <p className="text-white">{index}</p>
           </div>
-          <Indicator amount={userData ? Number(userData[1]) : 0} id={index - 1}/>
+          <Indicator
+            amount={userData ? Number(userData[1]) : 0}
+            id={index - 1}
+            shouldHighlightNextPool={hasPurchaseInNextPool}
+          />
         </div>
         <div className="absolute inset-0 flex items-center justify-center"></div>
         <div className="mt-8 text-white">
