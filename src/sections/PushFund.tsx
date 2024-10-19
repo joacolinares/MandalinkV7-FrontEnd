@@ -2,14 +2,14 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { IoPaperPlane } from "react-icons/io5";
 import { FaTelegram } from "react-icons/fa";
-import { MandaLinkAddress, USDTContract,PaymentAddress } from "@/utils/contracts";
+import { MandaLinkAddress, USDTContract,PaymentAddress, USDTContract2 } from "@/utils/contracts";
 import { useReadContract } from "thirdweb/react";
 
 const PushFund: React.FC = () => {
   const { t } = useTranslation();
-
+console.log("a")
   const { data: contractBalance } = useReadContract({
-    contract: USDTContract,
+    contract: USDTContract2,
     method: "function balanceOf(address account) view returns (uint256)",
     params: [PaymentAddress]
   }) 
