@@ -1,8 +1,13 @@
-import { MandaLinkContract } from "@/utils/contracts";
+import { MandaLinkContract, PaymentContract2 } from "@/utils/contracts";
 import { showSuccessAlert } from "@/utils/notifications";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { prepareContractCall, sendTransaction, waitForReceipt } from "thirdweb";
 import { useActiveAccount, useReadContract } from "thirdweb/react";
+import { client } from "@/client";
+import { chain } from "@/chain";
+
+
 
 interface Referral {
   level: number;
@@ -23,7 +28,7 @@ interface ReferralsProps {
   data: ReferralData;
 }
 
-const Referrals: React.FC<any> = ({ data }) => {
+const Referrals: React.FC<any> = ({ data,totalToClaim }) => {
   const { t } = useTranslation();
   const address = useActiveAccount()
 
@@ -49,6 +54,44 @@ const Referrals: React.FC<any> = ({ data }) => {
         console.error("Failed to copy: ", err);
       });
   };
+
+
+
+  const handleTransaction = async () => {
+    if (address) {
+      try {
+        const approvalToken = prepareContractCall({
+          contract: PaymentContract2,
+          method: "claimEarnings",
+          params: [],
+          gasPrice: BigInt(150000000000)
+        });
+
+        const { transactionHash: approveHash } = await sendTransaction({
+          transaction: approvalToken,
+          account: address,
+        });
+
+        await waitForReceipt({
+          client: client,
+          chain: chain,
+          transactionHash: approveHash
+        });
+        console.log("Aprovado")
+
+      } catch (error) {
+      //  console.error(error);
+      //  compraError()
+      alert("ERROR EN LA COMPRA")
+      console.log(error)
+      //  setTransactionStatus("error"); // En caso de error, muestra el mensaje
+      } finally {
+        console.log("fin") // Detén el proceso
+      }
+    }
+  };
+
+
 
   return (
     <div className="Referrals mt-20 flex flex-col items-center ">
@@ -114,8 +157,29 @@ const Referrals: React.FC<any> = ({ data }) => {
           </div>
         ))}
       </div>
+    <br></br>
+    <br></br>
+        Total a reclamar:     {totalToClaim}$
+    <br></br>
+    <br></br>
+    <button
+            className="mt-2 bg-[#632667] text-white text-base rounded-md px-2 py-1 w-full min-h-10 shadow-md hover:!bg-opacity-80 hover:outline outline-1"
+            onClick={() => handleTransaction()}
+            // Desactiva el botón durante el procesamiento
+          >
+           Reclamar
+          </button>
+    <br></br>
+    <br></br>
+
+
+
       <div className="mt-4 w-full">
         <div className="flex justify-between my-4">
+          <span className="font-bold">
+     
+          </span>
+          <br />
           <span className="font-bold">
             {t("landing.totalReferralInvestment")}
           </span>

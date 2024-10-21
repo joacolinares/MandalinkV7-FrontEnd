@@ -2,11 +2,12 @@ import { chain } from "@/chain";
 import { client } from "@/client";
 import { getContract } from "thirdweb";
 import { mandaLinkAbi } from "./abis/mandaLinkAbi";
+import { PaymentContractAbi } from "./abis/PaymentContractAbi";
 import { usdtAbi } from "./abis/usdtAbi";
 
 const USDTAddress = "0x31B4245d9f88DA6Fa01A14398adA46b177c7F2ba"
-export const MandaLinkAddress = "0x6831B3Be0f535faCB4cffE4A3b1b669539C97246"
-export const PaymentAddress = "0xC746caacB60cA0043994e64cDDE57f318765a9Eb"
+export const MandaLinkAddress = "0xC8570a8952617D49ebc6765756407b076A38a122"
+export const PaymentAddress = "0xc7c2DBB56dA108dCD5B8f49BDd65e9962C8467eB"
 
 
 export const USDTContract = getContract({
@@ -36,4 +37,10 @@ export const PaymentContract = getContract({
     client: client,
     address: PaymentAddress,
     chain: chain
+})
+export const PaymentContract2 = getContract({
+    client: client,
+    address: PaymentAddress,
+    chain: chain,
+    abi: PaymentContractAbi
 })

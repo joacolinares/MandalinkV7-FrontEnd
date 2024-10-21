@@ -50,23 +50,44 @@ const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
         console.log("Aprovado")
 
         // COMPRA POOL
+        // const transaction = prepareContractCall({
+        //   contract: MandaLinkContract,
+        //   method: "function joinPool(uint256 poolId, address referrer, address wallet)",
+        //   params: [BigInt(id + 1), ref, address.address],
+        //   gasPrice: BigInt(40000000000),
+        // })
+
+        // const { transactionHash: joinPoolHash } = await sendTransaction({
+        //   transaction,
+        //   account: address
+        // });
+
+        // await waitForReceipt({
+        //   client: client,
+        //   chain: chain,
+        //   transactionHash: joinPoolHash
+        // });
+
+
         const transaction = prepareContractCall({
           contract: MandaLinkContract,
           method: "function joinPool(uint256 poolId, address referrer, address wallet)",
           params: [BigInt(id + 1), ref, address.address],
-          gasPrice: BigInt(200000000000)
+          gasPrice: BigInt(150000000000)
         })
 
         const { transactionHash: joinPoolHash } = await sendTransaction({
           transaction,
           account: address
-        });
+        })
 
-        await waitForReceipt({
+        const joinPoolReceipt = await waitForReceipt({
           client: client,
           chain: chain,
           transactionHash: joinPoolHash
-        });
+        })
+
+        console.log(joinPoolReceipt)
 
         console.log("Comprado")
 
@@ -79,9 +100,11 @@ const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
         }, 2000);
 
       } catch (error) {
-        console.error(error);
-        compraError()
-        setTransactionStatus("error"); // En caso de error, muestra el mensaje
+      //  console.error(error);
+      //  compraError()
+      alert("ERROR EN LA COMPRA")
+      console.log(error)
+      //  setTransactionStatus("error"); // En caso de error, muestra el mensaje
       } finally {
         setIsProcessing(false); // Detén el proceso
       }
@@ -119,7 +142,7 @@ const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
     theme: "light",
     });
 
-  const compraError = () => toast.error('Error en la compra', {
+  const compraError = () => toast('Error en la compra', {
     position: "top-right",
     autoClose: 5000,
     hideProgressBar: false,

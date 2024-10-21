@@ -12,7 +12,7 @@ import espFlag from "@/assets/icons/esp.png";
 
 import { ConnectButton, useActiveAccount, useReadContract } from "thirdweb/react";
 import { client } from "@/client";
-import { MandaLinkAddress, MandaLinkContract, USDTContract,PaymentAddress,MandaLinkContract2, USDTContract2 } from "@/utils/contracts";
+import { MandaLinkAddress, MandaLinkContract, USDTContract,PaymentAddress,MandaLinkContract2, USDTContract2, PaymentContract2 } from "@/utils/contracts";
 import { chain } from "@/chain";
 import { createWallet, inAppWallet, smartWallet } from "thirdweb/wallets";
 
@@ -93,6 +93,7 @@ export function Landing() {
     method: "function totalPayed() view returns (uint256)",
     params: []
   });
+  console.log(totalInvested)
 
   const { data: distributed } = useReadContract({
     contract: MandaLinkContract,
@@ -174,10 +175,16 @@ export function Landing() {
     params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(6)],
   });
 
+  const { data: userBalances } = useReadContract({
+    contract: PaymentContract2,
+    method: "userBalances",  // Solo el nombre de la función
+    params: [address ? address.address : "0x0000000000000000000000000000000000000000"],  // Los parámetros a pasar a la función
+  });
 
+  console.log("userBalances", userBalances)
 
   const [referralLevels, setReferralLevels] = useState<any[]>([]);
-
+  const [totalToClaim, setTotalToClaim] = useState<any>(2)
   // UseEffect para almacenar los valores en referralLevels
   useEffect(() => {
     const levels = [
@@ -215,6 +222,13 @@ export function Landing() {
   }, [infoLevel1, infoLevel2, infoLevel3, infoLevel4, infoLevel5, infoLevel6, infoLevel7, infoLevel1Money, infoLevel2Money, infoLevel3Money, infoLevel4Money, infoLevel5Money, infoLevel6Money, infoLevel7Money]);
   
 
+  useEffect(() => {
+    if(userBalances != undefined){
+      console.log("DIFEENTE DE UNDEFINED: ",userBalances)
+      setTotalToClaim(Number(userBalances) / 10**6)
+    }
+  }, [userBalances])
+  
 
   //Estos son los datos que se van a mostrar en statistics section
   const [totalUsers, setTotalUsers] = useState({
@@ -408,13 +422,25 @@ export function Landing() {
                  sponsorGas: true,
               }}
             />
+
+{/* <ConnectButton
+              client={client}
+              chain={chain}
+              connectButton={{
+                label: t("landing.connectWallet"),
+                className:
+                  "!bg-c-violet-2 !bg-opacity-80 hover:!bg-opacity-80 !h-8 !text-white !font-light !py-1 !px-1 !rounded-md !shadow-lg  !transition !text-sm hover:!outline hover:!outline-1 hover:!outline-white",
+              }}
+            /> */}
+
           </div>
         </nav>
         <Main {...mainSectionData} />
         <SelectPoolSection />
 
         <StatisticsSection stats={statisticsData} />
-        <ReferralsSection data={referralData} />
+        <ReferralsSection data={referralData} totalToClaim={totalToClaim} />
+        {totalToClaim}AAA
         <PushFund />
 
         <div className="h-52"></div>
