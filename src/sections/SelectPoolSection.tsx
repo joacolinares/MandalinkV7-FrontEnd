@@ -102,6 +102,8 @@ const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
       } catch (error) {
       //  console.error(error);
       //  compraError()
+      console.log("ERORR!!!!!")
+      console.log(error)
       alert("ERROR EN LA COMPRA")
       console.log(error)
       //  setTransactionStatus("error"); // En caso de error, muestra el mensaje
