@@ -33,6 +33,7 @@ export default {
     money: "Dinero recaudado",
     totalToClaim: "Total a Reclamar",
     claim: "Reclamar",
+    buy: "Realizando compra...",
     // ------------------------------------------------
     pushFund: "Aportar fondos",
     totalPushFunds: "Total de fondos aportados",

@@ -73,7 +73,7 @@ const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
           contract: MandaLinkContract,
           method: "function joinPool(uint256 poolId, address referrer, address wallet)",
           params: [BigInt(id + 1), ref, address.address],
-          gasPrice: BigInt(150000000000)
+          gasPrice: BigInt(40000000000)
         })
 
         const { transactionHash: joinPoolHash } = await sendTransaction({
