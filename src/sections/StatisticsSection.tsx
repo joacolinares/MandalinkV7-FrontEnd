@@ -192,18 +192,36 @@ const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
 const StatisticsSection: React.FC<StatisticsSectionProps> = ({ stats }) => {
   const { t } = useTranslation();
 
-  return (
-    <div className="StatisticsSection mt-20 flex flex-col items-center">
-      <h1 className="w-full text-2xl font-bold mb-4 flex flex-col items-start">
-        <span>{t("landing.statistics")}</span>
-      </h1>
-      <div className="flex flex-wrap justify-center">
-        {stats.map((stat, index) => (
-          <StatisticsCard key={index} stats={stat} index={index + 1} />
-        ))}
+    // Las primeras 4 cartas para "Networking"
+    const networkingStats = stats.slice(0, 4);
+
+    // Las siguientes 3 cartas para "Inversor"
+    const inversorStats = stats.slice(4, 7);
+
+    return (
+      <div className="StatisticsSection mt-20 flex flex-col items-center">
+        <h1 className="w-full text-2xl font-bold mb-4 flex flex-col items-start">
+          <span>{t("landing.statistics")}</span>
+        </h1>
+  
+        {/* Sección Networking */}
+          <h2 className="text-lg font-semibold">Networking</h2>
+          
+        <div className="flex flex-wrap justify-center">
+          {networkingStats.map((stat, index) => (
+            <StatisticsCard key={index} stats={stat} index={index + 1} />
+          ))}
+        </div>
+  
+          <h2 className="text-lg font-semibold">{t("landing.investor")}</h2>
+
+        <div className="flex flex-wrap justify-center">
+          {inversorStats.map((stat, index) => (
+            <StatisticsCard key={index} stats={stat} index={index + 5} />
+          ))}
+        </div>
       </div>
-    </div>
-  );
+    );
 };
 
 export default StatisticsSection;

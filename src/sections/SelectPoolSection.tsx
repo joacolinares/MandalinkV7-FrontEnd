@@ -33,7 +33,7 @@ const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
         const approvalToken = prepareContractCall({
           contract: USDTContract,
           method: "approve",
-          params: [MandaLinkContract.address, BigInt(300000000000)],
+          params: [MandaLinkContract.address, BigInt(Number(value) * 10**6)],
           gasPrice: BigInt(150000000000)
         });
 

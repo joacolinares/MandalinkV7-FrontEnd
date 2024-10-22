@@ -159,7 +159,7 @@ const Referrals: React.FC<any> = ({ data,totalToClaim }) => {
       </div>
     <br></br>
     <br></br>
-        Total a reclamar:     {totalToClaim}$
+        {t("landing.totalToClaim")}:     {totalToClaim}$
     <br></br>
     <br></br>
     <button
@@ -167,7 +167,7 @@ const Referrals: React.FC<any> = ({ data,totalToClaim }) => {
             onClick={() => handleTransaction()}
             // Desactiva el botón durante el procesamiento
           >
-           Reclamar
+           {t("landing.claim")}
           </button>
     <br></br>
     <br></br>

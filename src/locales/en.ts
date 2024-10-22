@@ -21,6 +21,7 @@ export default {
     paid: "Paid",
     list: "List",
     noPositions: "No positions",
+    investor: "Investor",
     // ------------------------------------------------
     referred: "Referred",
     totalReferred: "Total referred",
@@ -30,6 +31,8 @@ export default {
     copy: "Copy",
     people: "Persons",
     money: "Money raised",
+    totalToClaim: "Total to Claim",
+    claim: "Claim",
     // ------------------------------------------------
     pushFund: "Push fund",
     totalPushFunds: "Total push funds",

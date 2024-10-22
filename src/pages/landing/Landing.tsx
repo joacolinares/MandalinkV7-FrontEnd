@@ -412,18 +412,18 @@ export function Landing() {
             />
           </div>
           <div className="flex gap-2">
-          <ConnectButton
+          {/* <ConnectButton
               client={client}
-              wallets={wallets}
+              wallets={wallets}                   GAS SPONSOREADO
               connectModal={{ size: "compact" }}
               accountAbstraction={{
               factoryAddress: "0xd80E5cA14226aC1a6c2EfcD6483AF972e2E35511",
                  chain: chain, // replace with the chain you want
                  sponsorGas: true,
               }}
-            />
+            /> */}
 
-{/* <ConnectButton
+<ConnectButton
               client={client}
               chain={chain}
               connectButton={{
@@ -431,7 +431,7 @@ export function Landing() {
                 className:
                   "!bg-c-violet-2 !bg-opacity-80 hover:!bg-opacity-80 !h-8 !text-white !font-light !py-1 !px-1 !rounded-md !shadow-lg  !transition !text-sm hover:!outline hover:!outline-1 hover:!outline-white",
               }}
-            /> */}
+            />
 
           </div>
         </nav>
@@ -440,7 +440,7 @@ export function Landing() {
 
         <StatisticsSection stats={statisticsData} />
         <ReferralsSection data={referralData} totalToClaim={totalToClaim} />
-        {totalToClaim}AAA
+        
         <PushFund />
 
         <div className="h-52"></div>
