@@ -336,7 +336,7 @@ export function Landing() {
   const referralData = {
     totalReferrals: totalPeople, // Total de personas de todos los niveles
     totalMoneyCollected: totalMoneyCollected, // Suma total del dinero recaudado por todos los niveles
-    investmentLink: `https://mandalink-v4.vercel.app/?REF=${address?.address}`,
+    investmentLink: `${window.location.origin}/?REF=${address?.address}`,
     referrals: referralLevels.map((level, index) => ({
       level: index + 1,
       percentage:

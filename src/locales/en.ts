@@ -38,5 +38,7 @@ export default {
     pushFund: "Push fund",
     totalPushFunds: "Total push funds",
     contractAddress: "Contract address",
+    buyText: "Making purchase...",
+    claimText: "Making a claim..."
   },
 };

@@ -38,5 +38,7 @@ export default {
     pushFund: "Aportar fondos",
     totalPushFunds: "Total de fondos aportados",
     contractAddress: "Dirección del contrato",
+    buyText: "Realizando Compra...",
+    claimText: "Realizando Reclamo..."
   },
 };

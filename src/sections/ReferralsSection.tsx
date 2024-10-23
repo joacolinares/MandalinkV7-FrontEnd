@@ -1,12 +1,13 @@
 import { MandaLinkContract, PaymentContract2 } from "@/utils/contracts";
 import { showSuccessAlert } from "@/utils/notifications";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { prepareContractCall, sendTransaction, waitForReceipt } from "thirdweb";
 import { useActiveAccount, useReadContract } from "thirdweb/react";
 import { client } from "@/client";
 import { chain } from "@/chain";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 interface Referral {
@@ -31,6 +32,7 @@ interface ReferralsProps {
 const Referrals: React.FC<any> = ({ data,totalToClaim }) => {
   const { t } = useTranslation();
   const address = useActiveAccount()
+  const [isProcessing, setIsProcessing] = useState(false);  // Muestra el overlay
 
   const { data: userData } = useReadContract({
     contract: MandaLinkContract,
@@ -55,11 +57,21 @@ const Referrals: React.FC<any> = ({ data,totalToClaim }) => {
       });
   };
 
-
+  const compraExitosa = () => toast.success('Retiro realizado con exito', {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    });
 
   const handleTransaction = async () => {
     if (address) {
       try {
+        setIsProcessing(true);
         const approvalToken = prepareContractCall({
           contract: PaymentContract2,
           method: "claimEarnings",
@@ -77,15 +89,20 @@ const Referrals: React.FC<any> = ({ data,totalToClaim }) => {
           chain: chain,
           transactionHash: approveHash
         });
-        console.log("Aprovado")
+        compraExitosa()
+
+        setTimeout(() => {
+          window.location.reload();  // Recarga después de mostrar éxito
+        }, 2000);
 
       } catch (error) {
       //  console.error(error);
       //  compraError()
-      alert("ERROR EN LA COMPRA")
+      alert("ERROR EN EL RECLAMO")
       console.log(error)
       //  setTransactionStatus("error"); // En caso de error, muestra el mensaje
       } finally {
+        setIsProcessing(false);
         console.log("fin") // Detén el proceso
       }
     }
@@ -95,6 +112,14 @@ const Referrals: React.FC<any> = ({ data,totalToClaim }) => {
 
   return (
     <div className="Referrals mt-20 flex flex-col items-center ">
+       <ToastContainer />
+       {isProcessing && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-75 flex justify-center items-center z-50">
+          <div className="text-white text-lg">
+          {t("landing.claimText")}
+          </div>
+        </div>
+      )}
       <h1 className="w-full text-2xl font-bold mb-4 flex flex-col items-start">
         <span>{t("landing.referred")}</span>
       </h1>

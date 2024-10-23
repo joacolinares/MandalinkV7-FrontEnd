@@ -161,9 +161,7 @@ const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
       {isProcessing && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-75 flex justify-center items-center z-50">
           <div className="text-white text-lg">
-            {transactionStatus === "processing" && "Procesando compra..."}
-            {transactionStatus === "success" && "Compra realizada con éxito"}
-            {transactionStatus === "error" && "Error en la compra"}
+            {t("landing.buyText")}
           </div>
         </div>
       )}

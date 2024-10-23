@@ -18,7 +18,8 @@ interface StatisticsSectionProps {
 const Indicator: React.FC<{ amount: number, id: number, shouldHighlightNextPool: boolean }> = ({ amount, id, shouldHighlightNextPool }) => (
   <div
     className={`w-6 h-6 rounded-full mr-3 ${
-      shouldHighlightNextPool || amount >= id ? "bg-green-500" : "bg-yellow-500"
+    // shouldHighlightNextPool || amount >= id ? "bg-green-500" : "bg-yellow-500"
+    shouldHighlightNextPool || amount >= id || (id === 6 && amount >= 5) ? "bg-green-500" : "bg-yellow-500"
     }`}
   />
 );
@@ -189,6 +190,75 @@ const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
   );
 };
 
+
+const StatisticsCard2: React.FC<{ stats: UserStats; index: number }> = ({
+  stats,
+  index,
+}) => {
+  const { t } = useTranslation();
+
+  const address = useActiveAccount()
+
+  const { data: poolData } = useReadContract({
+    contract: MandaLinkContract,
+    method: "function pools(uint256) view returns (uint256 price, uint256 numUsers)",
+    params: [BigInt(index)]
+  })
+
+  const { data: userData } = useReadContract({
+    contract: MandaLinkContract,
+    method: "function users(address) view returns (address referrer, uint256 directReferrals, uint256 missedOpportunities, uint256 payedExtra, uint256 totalTree)",
+    params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
+  })
+
+  const { data: poolPositions } = useReadContract({
+    contract: MandaLinkContract,
+    method: "function getPurchases(address userAddress) view returns ((uint256 poolId, uint256 position, bool hasPassed, bool startedInThisPool, bool canContribute)[])",
+    params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
+  })
+
+  console.log(poolPositions)
+
+  const filteredPositions = poolPositions
+    ? poolPositions
+        .filter((positionObj: any) => positionObj.poolId === BigInt(index))
+        .map((positionObj: any) => positionObj.position)
+    : [];
+
+
+
+    const hasPurchaseInNextPool = poolPositions
+  ? poolPositions.some(
+      (positionObj: any) =>
+        (positionObj.poolId === BigInt(5) && index === 6 && positionObj.startedInThisPool) || // Si compró en pool 5 y empezó en ella, la bolita de pool 6 será verde
+        (positionObj.poolId === BigInt(6) && index === 7 && positionObj.startedInThisPool)    // Si compró en pool 6 y empezó en ella, la bolita de pool 7 será verde
+    )
+  : false;
+
+  return (
+    <div className="w-[55%] lg:w-[25%] flex flex-col items-center justify-center rounded-lg m-2 overflow-visible">
+      <div className="w-full h-44 text-2xl font-semibold text-center bg-[#632667] rounded-lg px-2 py-4 flex flex-col justify-between relative">
+        <div className="absolute flex flex-row top-2 justify-between w-full">
+          <div className="w-6 h-6 border border-white flex items-center justify-center text-sm font-semibold rounded-md">
+            <p className="text-white">{index}</p>
+          </div>
+          <Indicator
+            amount={userData ? Number(userData[1]) : 0}
+            id={index - 1}
+            shouldHighlightNextPool={hasPurchaseInNextPool}
+          />
+        </div>
+        <div className="absolute inset-0 flex items-center justify-center"></div>
+        <div className="mt-8 text-white">
+          <div className="text-lg font-normal">{t("landing.totalUsers")}</div>
+          <div className="text-3xl font-bold">{poolData ? poolData[1].toString() : "0"}</div>
+        </div>
+      </div>
+      <CustomSelect options={filteredPositions} />
+    </div>
+  );
+};
+
 const StatisticsSection: React.FC<StatisticsSectionProps> = ({ stats }) => {
   const { t } = useTranslation();
 
@@ -215,11 +285,11 @@ const StatisticsSection: React.FC<StatisticsSectionProps> = ({ stats }) => {
   
           <h2 className="text-lg font-semibold">{t("landing.investor")}</h2>
 
-        <div className="flex flex-wrap justify-center">
-          {inversorStats.map((stat, index) => (
-            <StatisticsCard key={index} stats={stat} index={index + 5} />
-          ))}
-        </div>
+          <div className="flex justify-center space-x-4">
+            {inversorStats.map((stat, index) => (
+              <StatisticsCard2 key={index} stats={stat} index={index + 5} />
+            ))}
+          </div>
       </div>
     );
 };
