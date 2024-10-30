@@ -19,7 +19,7 @@ const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
 
   const { data: user } = useReadContract({
     contract: MandaLinkContract,
-    method: "users",
+    method: "directReferrals",
     params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
   });
 
@@ -68,13 +68,16 @@ const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
         //   transactionHash: joinPoolHash
         // });
 
-
+        console.log("Modificado")
+        console.log("INFOOO")
+        console.log(BigInt(id + 1))
+        console.log(ref)
         const transaction = prepareContractCall({
           contract: MandaLinkContract,
-          method: "function joinPool(uint256 poolId, address referrer, address wallet)",
-          params: [BigInt(id + 1), ref, address.address],
-          gasPrice: BigInt(40000000000)
-        })
+          method: "joinPool", // Solo el nombre de la función
+          params: [BigInt(id + 1), "0x610b9D05a53646d7E32203965a2393996826AA9A"], // Parámetros de la función
+          gasPrice: BigInt(40000000000),
+        });
 
         const { transactionHash: joinPoolHash } = await sendTransaction({
           transaction,

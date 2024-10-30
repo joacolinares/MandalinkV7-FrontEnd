@@ -5,9 +5,9 @@ import { mandaLinkAbi } from "./abis/mandaLinkAbi";
 import { PaymentContractAbi } from "./abis/PaymentContractAbi";
 import { usdtAbi } from "./abis/usdtAbi";
 
-const USDTAddress = "0x31B4245d9f88DA6Fa01A14398adA46b177c7F2ba"
-export const MandaLinkAddress = "0xC8570a8952617D49ebc6765756407b076A38a122"
-export const PaymentAddress = "0xc7c2DBB56dA108dCD5B8f49BDd65e9962C8467eB"
+const USDTAddress = "0x1103E49738e45A5D4A91cB78769688A66948A179"
+export const MandaLinkAddress = "0x5E0F98Ec31b25e7Ab3b3f8FaEEC190A0CD4e3F2C"
+export const PaymentAddress = "0x374c17f6Ac72391FFf4E71B0899aE5A010411bD4"
 
 
 export const USDTContract = getContract({
@@ -25,7 +25,7 @@ export const MandaLinkContract = getContract({
     client: client,
     address: MandaLinkAddress,
     chain: chain,
-  //  abi: mandaLinkAbi
+    abi: mandaLinkAbi
 })
 export const MandaLinkContract2 = getContract({
     client: client,

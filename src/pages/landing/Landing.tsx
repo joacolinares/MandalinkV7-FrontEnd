@@ -76,11 +76,33 @@ export function Landing() {
     params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
   }) 
 
-  const { data: user } = useReadContract({
-    contract: MandaLinkContract,
-    method: "function users(address) view returns (address referrer, uint256 directReferrals, uint256 missedOpportunities, uint256 payedExtra, uint256 totalTree)",
+  //Earnings
+  const { data: totalExtras } = useReadContract({
+    contract: PaymentContract2,
+    method: "totalExtras",
     params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
   })
+  //Commissions
+  const { data: totalCommissions } = useReadContract({
+    contract: PaymentContract2,
+    method: "totalCommissions",
+    params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
+  })
+
+  //Total Invested
+  const { data: totalInvested } = useReadContract({
+    contract: PaymentContract2,
+    method: "totalInvested",
+    params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
+  })
+
+  const { data: distributed } = useReadContract({
+    contract: PaymentContract2,
+    method: "totalDistributed",
+    params: []
+  });
+
+
 
   const { data: contractBalance } = useReadContract({
     contract: USDTContract2,
@@ -88,90 +110,82 @@ export function Landing() {
     params: [PaymentAddress]
   })
 
-  const { data: totalInvested } = useReadContract({
-    contract: MandaLinkContract,
-    method: "function totalPayed() view returns (uint256)",
-    params: []
-  });
+
   console.log(totalInvested)
 
-  const { data: distributed } = useReadContract({
-    contract: MandaLinkContract,
-    method: "function totalDistributed() view returns (uint256)",
-    params: []
-  });
+
 
   //BUSAR MANERA DE HACER OPTIMIZADO, NO PUDE HACERLO YA QUE DENTRO DE USEEFFECT NO ME DEJA USAR HOOKS
-  const { data: infoLevel1 } =  useReadContract({
-    contract: MandaLinkContract2,
-    method: "referralsByLevel",
-    params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(0)],
-  });
-  const { data: infoLevel2 } =  useReadContract({
-    contract: MandaLinkContract2,
-    method: "referralsByLevel",
-    params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(1)],
-  });
-  const { data: infoLevel3 } =  useReadContract({
-    contract: MandaLinkContract2,
-    method: "referralsByLevel",
-    params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(2)],
-  });
-  const { data: infoLevel4 } =  useReadContract({
-    contract: MandaLinkContract2,
-    method: "referralsByLevel",
-    params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(3)],
-  });
-  const { data: infoLevel5 } =  useReadContract({
-    contract: MandaLinkContract2,
-    method: "referralsByLevel",
-    params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(4)],
-  });
-  const { data: infoLevel6 } =  useReadContract({
-    contract: MandaLinkContract2,
-    method: "referralsByLevel",
-    params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(5)],
-  });
-  const { data: infoLevel7 } =  useReadContract({
-    contract: MandaLinkContract2,
-    method: "referralsByLevel",
-    params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(6)],
-  });
+  // const { data: infoLevel1 } =  useReadContract({
+  //   contract: MandaLinkContract2,
+  //   method: "referralsByLevel",
+  //   params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(0)],
+  // });
+  // const { data: infoLevel2 } =  useReadContract({
+  //   contract: MandaLinkContract2,
+  //   method: "referralsByLevel",
+  //   params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(1)],
+  // });
+  // const { data: infoLevel3 } =  useReadContract({
+  //   contract: MandaLinkContract2,
+  //   method: "referralsByLevel",
+  //   params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(2)],
+  // });
+  // const { data: infoLevel4 } =  useReadContract({
+  //   contract: MandaLinkContract2,
+  //   method: "referralsByLevel",
+  //   params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(3)],
+  // });
+  // const { data: infoLevel5 } =  useReadContract({
+  //   contract: MandaLinkContract2,
+  //   method: "referralsByLevel",
+  //   params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(4)],
+  // });
+  // const { data: infoLevel6 } =  useReadContract({
+  //   contract: MandaLinkContract2,
+  //   method: "referralsByLevel",
+  //   params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(5)],
+  // });
+  // const { data: infoLevel7 } =  useReadContract({
+  //   contract: MandaLinkContract2,
+  //   method: "referralsByLevel",
+  //   params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(6)],
+  // });
 
 
   const { data: infoLevel1Money } =  useReadContract({
-    contract: MandaLinkContract2,
-    method: "amountInvestInLevels",
+    contract: PaymentContract2,
+    method: "amountRecivedInLevels",
     params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(0)],
   });
   const { data: infoLevel2Money } =  useReadContract({
-    contract: MandaLinkContract2,
-    method: "amountInvestInLevels",
+    contract: PaymentContract2,
+    method: "amountRecivedInLevels",
     params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(1)],
   });
   const { data: infoLevel3Money } =  useReadContract({
-    contract: MandaLinkContract2,
-    method: "amountInvestInLevels",
+    contract: PaymentContract2,
+    method: "amountRecivedInLevels",
     params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(2)],
   });
   const { data: infoLevel4Money } =  useReadContract({
-    contract: MandaLinkContract2,
-    method: "amountInvestInLevels",
+    contract: PaymentContract2,
+    method: "amountRecivedInLevels",
     params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(3)],
   });
   const { data: infoLevel5Money } =  useReadContract({
-    contract: MandaLinkContract2,
-    method: "amountInvestInLevels",
+    contract: PaymentContract2,
+    method: "amountRecivedInLevels",
     params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(4)],
   });
   const { data: infoLevel6Money } =  useReadContract({
-    contract: MandaLinkContract2,
-    method: "amountInvestInLevels",
+    contract: PaymentContract2,
+    method: "amountRecivedInLevels",
     params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(5)],
   });
   const { data: infoLevel7Money } =  useReadContract({
-    contract: MandaLinkContract2,
-    method: "amountInvestInLevels",
+    contract: PaymentContract2,
+    method: "amountRecivedInLevels",
     params: [address ? address.address : "0x0000000000000000000000000000000000000000", BigInt(6)],
   });
 
@@ -181,7 +195,7 @@ export function Landing() {
     params: [address ? address.address : "0x0000000000000000000000000000000000000000"],  // Los parámetros a pasar a la función
   });
 
-  console.log("userBalances", userBalances)
+
 
   const [referralLevels, setReferralLevels] = useState<any[]>([]);
   const [totalToClaim, setTotalToClaim] = useState<any>(2)
@@ -189,37 +203,37 @@ export function Landing() {
   useEffect(() => {
     const levels = [
       {
-        people: infoLevel1 ? Number(infoLevel1) : 0,
+        // people: infoLevel1 ? Number(infoLevel1) : 0,
         money: infoLevel1Money ? Number(infoLevel1Money) : 0,
       },
       {
-        people: infoLevel2 ? Number(infoLevel2) : 0,
+        // people: infoLevel2 ? Number(infoLevel2) : 0,
         money: infoLevel2Money ? Number(infoLevel2Money) : 0,
       },
       {
-        people: infoLevel3 ? Number(infoLevel3) : 0,
+        // people: infoLevel3 ? Number(infoLevel3) : 0,
         money: infoLevel3Money ? Number(infoLevel3Money) : 0,
       },
       {
-        people: infoLevel4 ? Number(infoLevel4) : 0,
+        // people: infoLevel4 ? Number(infoLevel4) : 0,
         money: infoLevel4Money ? Number(infoLevel4Money) : 0,
       },
       {
-        people: infoLevel5 ? Number(infoLevel5) : 0,
+        // people: infoLevel5 ? Number(infoLevel5) : 0,
         money: infoLevel5Money ? Number(infoLevel5Money) : 0,
       },
       {
-        people: infoLevel6 ? Number(infoLevel6) : 0,
+        // people: infoLevel6 ? Number(infoLevel6) : 0,
         money: infoLevel6Money ? Number(infoLevel6Money) : 0,
       },
       {
-        people: infoLevel7 ? Number(infoLevel7) : 0,
+        // people: infoLevel7 ? Number(infoLevel7) : 0,
         money: infoLevel7Money ? Number(infoLevel7Money) : 0,
       },
     ];
   
     setReferralLevels(levels);
-  }, [infoLevel1, infoLevel2, infoLevel3, infoLevel4, infoLevel5, infoLevel6, infoLevel7, infoLevel1Money, infoLevel2Money, infoLevel3Money, infoLevel4Money, infoLevel5Money, infoLevel6Money, infoLevel7Money]);
+  }, [infoLevel1Money, infoLevel2Money, infoLevel3Money, infoLevel4Money, infoLevel5Money, infoLevel6Money, infoLevel7Money]);
   
 
   useEffect(() => {
@@ -359,8 +373,8 @@ export function Landing() {
 
   const mainSectionData = {
     initialWallet: Number(walletBalance) / 10**6,
-    initialEarnings: user ? Number(user[3]) / 10**6 : 0,
-    initialCommissions: user ? Number(user[4]) / 10**6 : 0,
+    initialEarnings: totalExtras ? Number(totalExtras) / 10**6 : 0,
+    initialCommissions: totalCommissions ? Number(totalCommissions) / 10**6 : 0,
     initialTlv: Number(contractBalance) / 10**6,
     totalInvested: Number(totalInvested) / 10**6,
     distributed: Number(distributed) / 10**6,

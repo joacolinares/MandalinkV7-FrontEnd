@@ -17,6 +17,19 @@ export const mandaLinkAbi = [
 	},
 	{
 		"inputs": [],
+		"name": "TOTAL_REFERRERS",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "USDT",
 		"outputs": [
 			{
@@ -34,19 +47,14 @@ export const mandaLinkAbi = [
 				"internalType": "address",
 				"name": "",
 				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
 			}
 		],
-		"name": "amountInvestInLevels",
+		"name": "canPassAllPools",
 		"outputs": [
 			{
-				"internalType": "uint256",
+				"internalType": "bool",
 				"name": "",
-				"type": "uint256"
+				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -58,94 +66,14 @@ export const mandaLinkAbi = [
 				"internalType": "address",
 				"name": "",
 				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
 			}
 		],
-		"name": "amountInvestInLevelsPerWallet",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "userAddress",
-				"type": "address"
-			}
-		],
-		"name": "getInfoUser",
+		"name": "directReferrals",
 		"outputs": [
 			{
 				"internalType": "address",
 				"name": "",
 				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "userAddress",
-				"type": "address"
-			}
-		],
-		"name": "getPurchases",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "poolId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "position",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bool",
-						"name": "hasPassed",
-						"type": "bool"
-					},
-					{
-						"internalType": "bool",
-						"name": "startedInThisPool",
-						"type": "bool"
-					},
-					{
-						"internalType": "bool",
-						"name": "canContribute",
-						"type": "bool"
-					}
-				],
-				"internalType": "struct multiPoolV4.Purchase[]",
-				"name": "",
-				"type": "tuple[]"
 			}
 		],
 		"stateMutability": "view",
@@ -159,31 +87,12 @@ export const mandaLinkAbi = [
 				"type": "uint256"
 			}
 		],
-		"name": "getQueue",
+		"name": "getCanPass",
 		"outputs": [
 			{
 				"internalType": "address[]",
 				"name": "",
 				"type": "address[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "user",
-				"type": "address"
-			}
-		],
-		"name": "getReferralCountsByLevel",
-		"outputs": [
-			{
-				"internalType": "uint256[]",
-				"name": "",
-				"type": "uint256[]"
 			}
 		],
 		"stateMutability": "view",
@@ -200,11 +109,6 @@ export const mandaLinkAbi = [
 				"internalType": "address",
 				"name": "referrer",
 				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "wallet",
-				"type": "address"
 			}
 		],
 		"name": "joinPool",
@@ -215,44 +119,12 @@ export const mandaLinkAbi = [
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
+				"internalType": "address",
 				"name": "",
-				"type": "uint256"
+				"type": "address"
 			}
 		],
-		"name": "levels",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "percentage",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "networkFeePercentage",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "payForExtraInPools",
+		"name": "numberOfDirects",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -268,7 +140,7 @@ export const mandaLinkAbi = [
 		"name": "paymentContract",
 		"outputs": [
 			{
-				"internalType": "contract PaymentContract",
+				"internalType": "contract PaymentContractV7",
 				"name": "",
 				"type": "address"
 			}
@@ -295,133 +167,20 @@ export const mandaLinkAbi = [
 				"internalType": "uint256",
 				"name": "numUsers",
 				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "projectFeePercentage",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "projectWallet",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
 			},
 			{
 				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "referralsByLevel",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "totalDistributed",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "totalExtra",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "totalPayed",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "users",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "referrer",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "directReferrals",
+				"name": "newUsers",
 				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
-				"name": "missedOpportunities",
+				"name": "minRefferals",
 				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
-				"name": "payedExtra",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "totalTree",
+				"name": "indexCanPass",
 				"type": "uint256"
 			}
 		],

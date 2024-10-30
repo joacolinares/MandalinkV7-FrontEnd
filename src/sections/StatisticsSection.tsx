@@ -15,7 +15,7 @@ interface StatisticsSectionProps {
   stats: UserStats[];
 }
 
-const Indicator: React.FC<{ amount: number, id: number, shouldHighlightNextPool: boolean }> = ({ amount, id, shouldHighlightNextPool }) => (
+const Indicator: React.FC<{ amount: number, id: number, shouldHighlightNextPool: any }> = ({ amount, id, shouldHighlightNextPool }) => (
   <div
     className={`w-6 h-6 rounded-full mr-3 ${
     // shouldHighlightNextPool || amount >= id ? "bg-green-500" : "bg-yellow-500"
@@ -132,39 +132,38 @@ const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
 
   const { data: poolData } = useReadContract({
     contract: MandaLinkContract,
-    method: "function pools(uint256) view returns (uint256 price, uint256 numUsers)",
+    method: "pools",
     params: [BigInt(index)]
   })
 
   const { data: userData } = useReadContract({
     contract: MandaLinkContract,
-    method: "function users(address) view returns (address referrer, uint256 directReferrals, uint256 missedOpportunities, uint256 payedExtra, uint256 totalTree)",
+    method: "numberOfDirects",
     params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
   })
-
-  const { data: poolPositions } = useReadContract({
+  const { data: canPassAllPools } = useReadContract({
     contract: MandaLinkContract,
-    method: "function getPurchases(address userAddress) view returns ((uint256 poolId, uint256 position, bool hasPassed, bool startedInThisPool, bool canContribute)[])",
+    method: "canPassAllPools",
     params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
   })
 
-  console.log(poolPositions)
 
-  const filteredPositions = poolPositions
-    ? poolPositions
-        .filter((positionObj: any) => positionObj.poolId === BigInt(index))
-        .map((positionObj: any) => positionObj.position)
-    : [];
+  // const { data: poolPositions } = useReadContract({
+  //   contract: MandaLinkContract,
+  //   method: "function getPurchases(address userAddress) view returns ((uint256 poolId, uint256 position, bool hasPassed, bool startedInThisPool, bool canContribute)[])",
+  //   params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
+  // })
+
+  // console.log(poolPositions)
+
+  // const filteredPositions = poolPositions
+  //   ? poolPositions
+  //       .filter((positionObj: any) => positionObj.poolId === BigInt(index))
+  //       .map((positionObj: any) => positionObj.position)
+  //   : [];
 
 
 
-    const hasPurchaseInNextPool = poolPositions
-  ? poolPositions.some(
-      (positionObj: any) =>
-        (positionObj.poolId === BigInt(5) && index === 6 && positionObj.startedInThisPool) || // Si compró en pool 5 y empezó en ella, la bolita de pool 6 será verde
-        (positionObj.poolId === BigInt(6) && index === 7 && positionObj.startedInThisPool)    // Si compró en pool 6 y empezó en ella, la bolita de pool 7 será verde
-    )
-  : false;
 
   return (
     <div className="w-[45%] lg:w-[20%] flex flex-col items-center justify-center rounded-lg m-2 overflow-visible">
@@ -174,9 +173,9 @@ const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
             <p className="text-white">{index}</p>
           </div>
           <Indicator
-            amount={userData ? Number(userData[1]) : 0}
+            amount={userData ? Number(userData) : 0}
             id={index - 1}
-            shouldHighlightNextPool={hasPurchaseInNextPool}
+            shouldHighlightNextPool={canPassAllPools}
           />
         </div>
         <div className="absolute inset-0 flex items-center justify-center"></div>
@@ -185,7 +184,7 @@ const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
           <div className="text-3xl font-bold">{poolData ? poolData[1].toString() : "0"}</div>
         </div>
       </div>
-      <CustomSelect options={filteredPositions} />
+      {/* <CustomSelect options={filteredPositions} /> */}
     </div>
   );
 };
@@ -201,39 +200,36 @@ const StatisticsCard2: React.FC<{ stats: UserStats; index: number }> = ({
 
   const { data: poolData } = useReadContract({
     contract: MandaLinkContract,
-    method: "function pools(uint256) view returns (uint256 price, uint256 numUsers)",
+    method: "pools",
     params: [BigInt(index)]
   })
 
   const { data: userData } = useReadContract({
     contract: MandaLinkContract,
-    method: "function users(address) view returns (address referrer, uint256 directReferrals, uint256 missedOpportunities, uint256 payedExtra, uint256 totalTree)",
+    method: "numberOfDirects",
     params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
   })
 
-  const { data: poolPositions } = useReadContract({
+
+  const { data: canPassAllPools } = useReadContract({
     contract: MandaLinkContract,
-    method: "function getPurchases(address userAddress) view returns ((uint256 poolId, uint256 position, bool hasPassed, bool startedInThisPool, bool canContribute)[])",
+    method: "canPassAllPools",
     params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
   })
 
-  console.log(poolPositions)
+  // const { data: poolPositions } = useReadContract({
+  //   contract: MandaLinkContract,
+  //   method: "function getPurchases(address userAddress) view returns ((uint256 poolId, uint256 position, bool hasPassed, bool startedInThisPool, bool canContribute)[])",
+  //   params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
+  // })
 
-  const filteredPositions = poolPositions
-    ? poolPositions
-        .filter((positionObj: any) => positionObj.poolId === BigInt(index))
-        .map((positionObj: any) => positionObj.position)
-    : [];
+  // const filteredPositions = poolPositions
+  //   ? poolPositions
+  //       .filter((positionObj: any) => positionObj.poolId === BigInt(index))
+  //       .map((positionObj: any) => positionObj.position)
+  //   : [];
 
 
-
-    const hasPurchaseInNextPool = poolPositions
-  ? poolPositions.some(
-      (positionObj: any) =>
-        (positionObj.poolId === BigInt(5) && index === 6 && positionObj.startedInThisPool) || // Si compró en pool 5 y empezó en ella, la bolita de pool 6 será verde
-        (positionObj.poolId === BigInt(6) && index === 7 && positionObj.startedInThisPool)    // Si compró en pool 6 y empezó en ella, la bolita de pool 7 será verde
-    )
-  : false;
 
   return (
     <div className="w-[55%] lg:w-[25%] flex flex-col items-center justify-center rounded-lg m-2 overflow-visible">
@@ -243,9 +239,9 @@ const StatisticsCard2: React.FC<{ stats: UserStats; index: number }> = ({
             <p className="text-white">{index}</p>
           </div>
           <Indicator
-            amount={userData ? Number(userData[1]) : 0}
+            amount={userData ? Number(userData) : 0}
             id={index - 1}
-            shouldHighlightNextPool={hasPurchaseInNextPool}
+            shouldHighlightNextPool={canPassAllPools}
           />
         </div>
         <div className="absolute inset-0 flex items-center justify-center"></div>
@@ -254,7 +250,7 @@ const StatisticsCard2: React.FC<{ stats: UserStats; index: number }> = ({
           <div className="text-3xl font-bold">{poolData ? poolData[1].toString() : "0"}</div>
         </div>
       </div>
-      <CustomSelect options={filteredPositions} />
+      {/* <CustomSelect options={filteredPositions} /> */}
     </div>
   );
 };

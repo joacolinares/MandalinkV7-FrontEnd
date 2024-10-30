@@ -34,9 +34,10 @@ const Referrals: React.FC<any> = ({ data,totalToClaim }) => {
   const address = useActiveAccount()
   const [isProcessing, setIsProcessing] = useState(false);  // Muestra el overlay
 
-  const { data: userData } = useReadContract({
-    contract: MandaLinkContract,
-    method: "function users(address) view returns (address referrer, uint256 directReferrals, uint256 missedOpportunities, uint256 payedExtra, uint256 totalTree)",
+  //Commissions
+  const { data: totalCommissions } = useReadContract({
+    contract: PaymentContract2,
+    method: "totalCommissions",
     params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
   })
 
@@ -44,7 +45,7 @@ const Referrals: React.FC<any> = ({ data,totalToClaim }) => {
 
   
 
-  const { investmentLink, referrals,totalReferrals } = data;
+   const { investmentLink, referrals,totalReferrals } = data;
 
   const handleCopy = () => {
     navigator.clipboard
@@ -126,7 +127,7 @@ const Referrals: React.FC<any> = ({ data,totalToClaim }) => {
       <div className="text-xl  flex flex-col items-center gap-2 mb-2">
         <span>{t("landing.totalReferred")}</span>
         <span className="text-2xl font-bold">
-          {userData ? totalReferrals : 0}
+          {data ? totalReferrals : 0}
         </span>
       </div>
       <div className="flex flex-col w-full ">
@@ -139,7 +140,7 @@ const Referrals: React.FC<any> = ({ data,totalToClaim }) => {
               referral.percentage
             }`}</div>
             <div className="flex items-center">
-              <span style={{display:"inline-block"}} className="mr-3 font-bold">{t("landing.people")} {referral.people}</span>
+              {/* <span style={{display:"inline-block"}} className="mr-3 font-bold">{t("landing.people")} {referral.people}</span> */}
               <span style={{display:"inline-block"}} className="mr-3 font-bold">{t("landing.money")} {referral.money / 1000000}$</span>
 
               {/*<div className="flex items-center">
@@ -209,7 +210,7 @@ const Referrals: React.FC<any> = ({ data,totalToClaim }) => {
             {t("landing.totalReferralInvestment")}
           </span>
           <span className="font-bold">
-            {userData ? Number(userData[4]) / 10 ** 6 : 0} USDT
+            {totalCommissions ? Number(totalCommissions) / 10 ** 6 : 0} USDT
           </span>
         </div>
 
