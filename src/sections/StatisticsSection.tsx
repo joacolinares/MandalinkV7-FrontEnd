@@ -127,7 +127,7 @@ const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
   index,
 }) => {
   const { t } = useTranslation();
-
+  const [filteredPositions, setFilteredPositions] = useState<string[]>([]);
   const address = useActiveAccount()
 
   const { data: poolData } = useReadContract({
@@ -150,10 +150,10 @@ const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
 
   // const { data: poolPositions } = useReadContract({
   //   contract: MandaLinkContract,
-  //   method: "function getPurchases(address userAddress) view returns ((uint256 poolId, uint256 position, bool hasPassed, bool startedInThisPool, bool canContribute)[])",
-  //   params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
+  //   method: "positionsPerPool",
+  //   params: address ? [address.address,BigInt(1),BigInt(0)] : ["0x0000000000000000000000000000000000000000",BigInt(0),BigInt(0)]
   // })
-
+  // console.log("informacionnn")
   // console.log(poolPositions)
 
   // const filteredPositions = poolPositions
@@ -161,6 +161,40 @@ const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
   //       .filter((positionObj: any) => positionObj.poolId === BigInt(index))
   //       .map((positionObj: any) => positionObj.position)
   //   : [];
+
+  const fetchAllPositions = async () => {
+    const allPositions: string[] = [];
+
+    // Itera desde poolId 1 hasta 7
+    for (let poolId = 1; poolId <= 7; poolId++) {
+      let positionIndex = 0;
+      while (true) {
+        // Intenta obtener los datos de `positionsPerPool`
+        // const { data: positionData } = await useReadContract({
+        //   contract: MandaLinkContract,
+        //   method: "positionsPerPool",
+        //   params: address ? [address.address, BigInt(poolId), BigInt(positionIndex)] : ["0x0000000000000000000000000000000000000000", BigInt(poolId), BigInt(positionIndex)]
+        // });
+
+        // if (!positionData) break; // Si no hay más datos, sale del bucle `while`
+        
+        // // Agrega la posición encontrada a `allPositions`
+        // allPositions.push(positionData.toString());
+        console.log(allPositions)
+        positionIndex++;
+      }
+    }
+    setFilteredPositions(allPositions); // Actualiza el estado con todas las posiciones encontradas
+  };
+
+  useEffect(() => {
+    if (address) {
+      console.log("LLAMA A LA FUNCION")
+      fetchAllPositions();
+    }
+  }, [address]);
+
+
 
 
 
@@ -184,7 +218,7 @@ const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
           <div className="text-3xl font-bold">{poolData ? poolData[1].toString() : "0"}</div>
         </div>
       </div>
-      {/* <CustomSelect options={filteredPositions} /> */}
+     {/* <CustomSelect options={filteredPositions} />  */}
     </div>
   );
 };
@@ -229,6 +263,19 @@ const StatisticsCard2: React.FC<{ stats: UserStats; index: number }> = ({
   //       .map((positionObj: any) => positionObj.position)
   //   : [];
 
+  const { data: poolPositions } = useReadContract({
+    contract: MandaLinkContract,
+    method: "positionsPerPool",
+    params: address ? [address.address,BigInt(1),BigInt(0)] : ["0x0000000000000000000000000000000000000000",BigInt(0),BigInt(0)]
+  })
+  console.log("informacionnn")
+  console.log(poolPositions)
+
+  // const filteredPositions = poolPositions
+  //   ? poolPositions
+  //       .filter((positionObj: any) => positionObj.poolId === BigInt(index))
+  //       .map((positionObj: any) => positionObj.position)
+  //   : [];
 
 
   return (
@@ -250,7 +297,7 @@ const StatisticsCard2: React.FC<{ stats: UserStats; index: number }> = ({
           <div className="text-3xl font-bold">{poolData ? poolData[1].toString() : "0"}</div>
         </div>
       </div>
-      {/* <CustomSelect options={filteredPositions} /> */}
+       {/* <CustomSelect options={filteredPositions} />  */}
     </div>
   );
 };

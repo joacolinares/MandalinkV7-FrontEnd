@@ -1,12 +1,5 @@
 export const PaymentContractAbi = [
 	{
-		"inputs": [],
-		"name": "claimEarnings",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -76,84 +69,39 @@ export const PaymentContractAbi = [
 	},
 	{
 		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"name": "PROJECTFEEPERCENTAGE",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "user",
+				"name": "",
 				"type": "address"
 			},
 			{
-				"internalType": "uint256",
-				"name": "poolId",
-				"type": "uint256"
-			}
-		],
-		"name": "saveExceedingPayment",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "poolPrice",
-				"type": "uint256"
-			}
-		],
-		"name": "saveProjectFee",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address[]",
-				"name": "referrers",
-				"type": "address[]"
-			},
-			{
-				"internalType": "uint256",
-				"name": "poolPrice",
-				"type": "uint256"
-			}
-		],
-		"name": "saveReferralPayments",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
 				"internalType": "address",
-				"name": "_multiPoolAddress",
+				"name": "",
 				"type": "address"
 			}
 		],
-		"name": "setMultiPoolAddress",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
+		"name": "amountInvestInLevelsPerWallet",
+		"outputs": [
 			{
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -197,6 +145,13 @@ export const PaymentContractAbi = [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "claimEarnings",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -259,7 +214,31 @@ export const PaymentContractAbi = [
 	},
 	{
 		"inputs": [],
-		"name": "PROJECTFEEPERCENTAGE",
+		"name": "projectWallet",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "referralsByLevel",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -272,15 +251,76 @@ export const PaymentContractAbi = [
 	},
 	{
 		"inputs": [],
-		"name": "projectWallet",
-		"outputs": [
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
 			{
 				"internalType": "address",
-				"name": "",
+				"name": "user",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "poolId",
+				"type": "uint256"
+			}
+		],
+		"name": "saveExceedingPayment",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "poolPrice",
+				"type": "uint256"
+			}
+		],
+		"name": "saveProjectFee",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address[]",
+				"name": "referrers",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256",
+				"name": "poolPrice",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "user",
 				"type": "address"
 			}
 		],
-		"stateMutability": "view",
+		"name": "saveReferralPayments",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_multiPoolAddress",
+				"type": "address"
+			}
+		],
+		"name": "setMultiPoolAddress",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -345,6 +385,19 @@ export const PaymentContractAbi = [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{

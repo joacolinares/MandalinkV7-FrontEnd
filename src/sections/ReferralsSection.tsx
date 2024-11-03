@@ -140,7 +140,7 @@ const Referrals: React.FC<any> = ({ data,totalToClaim }) => {
               referral.percentage
             }`}</div>
             <div className="flex items-center">
-              {/* <span style={{display:"inline-block"}} className="mr-3 font-bold">{t("landing.people")} {referral.people}</span> */}
+               <span style={{display:"inline-block"}} className="mr-3 font-bold">{t("landing.people")} {referral.people}</span> 
               <span style={{display:"inline-block"}} className="mr-3 font-bold">{t("landing.money")} {referral.money / 1000000}$</span>
 
               {/*<div className="flex items-center">
