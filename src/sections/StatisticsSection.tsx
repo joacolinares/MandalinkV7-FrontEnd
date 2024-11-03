@@ -170,16 +170,16 @@ const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
       let positionIndex = 0;
       while (true) {
         // Intenta obtener los datos de `positionsPerPool`
-        // const { data: positionData } = await useReadContract({
-        //   contract: MandaLinkContract,
-        //   method: "positionsPerPool",
-        //   params: address ? [address.address, BigInt(poolId), BigInt(positionIndex)] : ["0x0000000000000000000000000000000000000000", BigInt(poolId), BigInt(positionIndex)]
-        // });
+        const { data: positionData } = await useReadContract({
+          contract: MandaLinkContract,
+          method: "positionsPerPool",
+          params: address ? [address.address, BigInt(poolId), BigInt(positionIndex)] : ["0x0000000000000000000000000000000000000000", BigInt(poolId), BigInt(positionIndex)]
+        });
 
-        // if (!positionData) break; // Si no hay más datos, sale del bucle `while`
+        if (!positionData) break; // Si no hay más datos, sale del bucle `while`
         
-        // // Agrega la posición encontrada a `allPositions`
-        // allPositions.push(positionData.toString());
+        // Agrega la posición encontrada a `allPositions`
+        allPositions.push(positionData.toString());
         console.log(allPositions)
         positionIndex++;
       }
@@ -189,7 +189,7 @@ const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
 
   useEffect(() => {
     if (address) {
-      console.log("LLAMA A LA FUNCION")
+      console.log("LLAMA A")
       fetchAllPositions();
     }
   }, [address]);
