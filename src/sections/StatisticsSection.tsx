@@ -19,7 +19,7 @@ const Indicator: React.FC<{ amount: number, id: number, shouldHighlightNextPool:
   <div
     className={`w-6 h-6 rounded-full mr-3 ${
     // shouldHighlightNextPool || amount >= id ? "bg-green-500" : "bg-yellow-500"
-    shouldHighlightNextPool || amount >= id || (id === 6 && amount >= 5) ? "bg-green-500" : "bg-yellow-500"
+    shouldHighlightNextPool &&  id + 1 >= 5|| amount >= id || (id === 6 && amount >= 5) ? "bg-green-500" : "bg-yellow-500"
     }`}
   />
 );
@@ -75,7 +75,7 @@ const CustomSelect: React.FC<{ options: string[] }> = ({ options }) => {
           className="flex-grow text-center cursor-pointer"
           onClick={() => setIsOpen(true)}
         >
-          {options.length > 0 ? Number(options[selectedIndex]) + 1 : t("landing.noPositions")}
+          {options.length > 0 ? Number(options[selectedIndex])  : t("landing.noPositions")}
         </div>
       </div>
 
@@ -108,7 +108,7 @@ const CustomSelect: React.FC<{ options: string[] }> = ({ options }) => {
                       setIsOpen(false);
                     }}
                   >
-                    {Number(option) + 1}
+                    {Number(option)}
                   </div>
                 ))
               ) : (
@@ -122,12 +122,133 @@ const CustomSelect: React.FC<{ options: string[] }> = ({ options }) => {
   );
 };
 
+
+
+
+
+
+const CustomSelect2: React.FC<{ options: string[], poolData: any }> = ({ options, poolData }) => {
+  const { t } = useTranslation();
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  // Filtrar opciones basadas en poolData[4]
+  console.log("INFORMACIONNN")
+  const filteredOptions = Number(poolData[4]) === 1 ? options.slice(1) : options;
+
+  const handleChange = (direction: "up" | "down") => {
+    setSelectedIndex((prev) =>
+      direction === "up"
+        ? (prev - 1 + filteredOptions.length) % filteredOptions.length
+        : (prev + 1) % filteredOptions.length
+    );
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Función para formatear la opción mostrando solo los primeros y últimos 4 caracteres
+  const formatOption = (option: string) => {
+    return option === "Tu posición"
+      ? option // No recortar si la opción es "Tu posición"
+      : option.length > 8
+      ? `${option.slice(0, 4)}...${option.slice(-4)}`
+      : option; // Si la opción es menor de 8 caracteres, mostrar completa
+  };
+
+  return (
+    <>
+      <div className="mt-2 bg-[#632667] text-white text-base px-2 py-1 w-full rounded-md flex items-center justify-between hover:outline hover:outline-1 hover:outline-white">
+        <div className="flex flex-col my-1">
+          <button
+            onClick={() => handleChange("up")}
+            className="text-sm leading-none"
+          >
+            &#9650;
+          </button>
+          <button
+            onClick={() => handleChange("down")}
+            className="text-sm leading-none"
+          >
+            &#9660;
+          </button>
+        </div>
+        <div
+          className="flex-grow text-center cursor-pointer"
+          onClick={() => setIsOpen(true)}
+        >
+          {filteredOptions.length > 0 ? formatOption(filteredOptions[selectedIndex]) : t("landing.noPositions")}
+        </div>
+      </div>
+
+      {isOpen && (
+        <div className="fixed inset-0 bg-black !text-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+          <div
+            ref={modalRef}
+            className="bg-c-violet-2 text-white rounded-lg p-4 m-4 h-96 w-96"
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-bold text-white">
+                {t("landing.list")}
+              </h3>
+              <button
+                onClick={() => setIsOpen(false)}
+                className=" hover:text-gray-300 text-lg font-bold text-white"
+              >
+                &#x2715;
+              </button>
+            </div>
+
+            <div className="h-[90%]  overflow-y-auto">
+              {filteredOptions.length > 0 ? (
+                filteredOptions.map((option, index) => (
+                  <div
+                    key={index}
+                    className="p-2 hover:bg-gray-100 hover:rounded-md hover:bg-opacity-10"
+                    onClick={() => {
+                      setSelectedIndex(index);
+                      setIsOpen(false);
+                    }}
+                  >
+                    {formatOption(option)}
+                  </div>
+                ))
+              ) : (
+                <div className="text-center text-white">{t("landing.noPositions")}</div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+
+
+
+
+
 const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
   stats,
   index,
 }) => {
   const { t } = useTranslation();
-  const [filteredPositions, setFilteredPositions] = useState<string[]>([]);
+ // const [filteredPositions, setFilteredPositions] = useState<string[]>([]);
   const address = useActiveAccount()
 
   const { data: poolData } = useReadContract({
@@ -136,68 +257,108 @@ const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
     params: [BigInt(index)]
   })
 
+  console.log("INDEX", index)
+  console.log(poolData)
+
   const { data: userData } = useReadContract({
     contract: MandaLinkContract,
     method: "numberOfDirects",
     params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
   })
-  const { data: canPassAllPools } = useReadContract({
+  const { data: canPassInvestorPools } = useReadContract({
     contract: MandaLinkContract,
-    method: "canPassAllPools",
+    method: "canPassInvestorPools",
     params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
   })
 
+         const { data: positionData1 } =  useReadContract({
+           contract: MandaLinkContract,
+           method: "positionsPerPool",
+           params: address ? [address.address, BigInt(index), BigInt(0)] : ["0x0000000000000000000000000000000000000000", BigInt(index), BigInt(0)]
+         });
+         const { data: positionData2 } =  useReadContract({
+           contract: MandaLinkContract,
+           method: "positionsPerPool",
+           params: address ? [address.address, BigInt(index), BigInt(1)] : ["0x0000000000000000000000000000000000000000", BigInt(index), BigInt(1)]
+         });
+         const { data: positionData3 } =  useReadContract({
+           contract: MandaLinkContract,
+           method: "positionsPerPool",
+           params: address ? [address.address, BigInt(index), BigInt(2)] : ["0x0000000000000000000000000000000000000000", BigInt(index), BigInt(2)]
+         });
+         const { data: positionData4 } =  useReadContract({
+           contract: MandaLinkContract,
+           method: "positionsPerPool",
+           params: address ? [address.address, BigInt(index), BigInt(3)] : ["0x0000000000000000000000000000000000000000", BigInt(index), BigInt(3)]
+         });
+         const { data: positionData5 } =  useReadContract({
+           contract: MandaLinkContract,
+           method: "positionsPerPool",
+           params: address ? [address.address, BigInt(index), BigInt(4)] : ["0x0000000000000000000000000000000000000000", BigInt(index), BigInt(4)]
+         });
+         const { data: positionData6 } =  useReadContract({
+           contract: MandaLinkContract,
+           method: "positionsPerPool",
+           params: address ? [address.address, BigInt(index), BigInt(5)] : ["0x0000000000000000000000000000000000000000", BigInt(index), BigInt(5)]
+         });
+         const { data: positionData7 } =  useReadContract({
+           contract: MandaLinkContract,
+           method: "positionsPerPool",
+           params: address ? [address.address, BigInt(index), BigInt(6)] : ["0x0000000000000000000000000000000000000000", BigInt(index), BigInt(6)]
+         });
+         const { data: positionData8 } =  useReadContract({
+           contract: MandaLinkContract,
+           method: "positionsPerPool",
+           params: address ? [address.address, BigInt(index), BigInt(7)] : ["0x0000000000000000000000000000000000000000", BigInt(index), BigInt(7)]
+         });
+         const { data: positionData9 } =  useReadContract({
+           contract: MandaLinkContract,
+           method: "positionsPerPool",
+           params: address ? [address.address, BigInt(index), BigInt(8)] : ["0x0000000000000000000000000000000000000000", BigInt(index), BigInt(8)]
+         });
+         const { data: positionData10 } =  useReadContract({
+           contract: MandaLinkContract,
+           method: "positionsPerPool",
+           params: address ? [address.address, BigInt(index), BigInt(9)] : ["0x0000000000000000000000000000000000000000", BigInt(index), BigInt(9)]
+         });
 
-  // const { data: poolPositions } = useReadContract({
-  //   contract: MandaLinkContract,
-  //   method: "positionsPerPool",
-  //   params: address ? [address.address,BigInt(1),BigInt(0)] : ["0x0000000000000000000000000000000000000000",BigInt(0),BigInt(0)]
-  // })
-  // console.log("informacionnn")
-  // console.log(poolPositions)
-
-  // const filteredPositions = poolPositions
-  //   ? poolPositions
-  //       .filter((positionObj: any) => positionObj.poolId === BigInt(index))
-  //       .map((positionObj: any) => positionObj.position)
-  //   : [];
-
-  const fetchAllPositions = async () => {
-    const allPositions: string[] = [];
-
-    // Itera desde poolId 1 hasta 7
-    for (let poolId = 1; poolId <= 7; poolId++) {
-      let positionIndex = 0;
-      while (true) {
-        // Intenta obtener los datos de `positionsPerPool`
-        const { data: positionData } = await useReadContract({
-          contract: MandaLinkContract,
-          method: "positionsPerPool",
-          params: address ? [address.address, BigInt(poolId), BigInt(positionIndex)] : ["0x0000000000000000000000000000000000000000", BigInt(poolId), BigInt(positionIndex)]
-        });
-
-        if (!positionData) break; // Si no hay más datos, sale del bucle `while`
-        
-        // Agrega la posición encontrada a `allPositions`
-        allPositions.push(positionData.toString());
-        console.log(allPositions)
-        positionIndex++;
-      }
-    }
-    setFilteredPositions(allPositions); // Actualiza el estado con todas las posiciones encontradas
-  };
-
-  useEffect(() => {
-    if (address) {
-      console.log("LLAMA A")
-      fetchAllPositions();
-    }
-  }, [address]);
+         const filteredPositions = positionData1 === undefined
+         ? [] // Si positionData1 es undefined, asigna un array vacío
+         : [
+             positionData1?.toString(),
+             positionData2?.toString(),
+             positionData3?.toString(),
+             positionData4?.toString(),
+             positionData5?.toString(),
+             positionData6?.toString(),
+             positionData7?.toString(),
+             positionData8?.toString(),
+             positionData9?.toString(),
+             positionData10?.toString(),
+           ].filter(position => position !== undefined && position !== "N/A");
+       
+       let displayOptions: any;
+       console.log(filteredPositions)
+       displayOptions = filteredPositions.length > 0 ? filteredPositions : [];
 
 
 
+       const { data: getCanPass } =  useReadContract({
+        contract: MandaLinkContract,
+        method: "getCanPass",
+        params: address ? [BigInt(index)] : [BigInt(index)]
+      });
+
+      console.log(index)
+      console.log(getCanPass)
 
 
+
+      const canPassOptions: string[] = getCanPass
+      ? getCanPass.map((wallet: string) =>
+          wallet === address?.address ? "Tu posición" : wallet
+        )
+      : [];
 
   return (
     <div className="w-[45%] lg:w-[20%] flex flex-col items-center justify-center rounded-lg m-2 overflow-visible">
@@ -209,16 +370,22 @@ const StatisticsCard: React.FC<{ stats: UserStats; index: number }> = ({
           <Indicator
             amount={userData ? Number(userData) : 0}
             id={index - 1}
-            shouldHighlightNextPool={canPassAllPools}
+            shouldHighlightNextPool={canPassInvestorPools}
           />
         </div>
         <div className="absolute inset-0 flex items-center justify-center"></div>
         <div className="mt-8 text-white">
           <div className="text-lg font-normal">{t("landing.totalUsers")}</div>
           <div className="text-3xl font-bold">{poolData ? poolData[1].toString() : "0"}</div>
+          <div style={{fontSize:"45%"}} className=" font-bold">{t("landing.newUsers")}: {poolData ? poolData[2].toString() : "0"}</div>
         </div>
       </div>
-     {/* <CustomSelect options={filteredPositions} />  */}
+      <CustomSelect options={displayOptions} />  
+      {poolData && poolData.length > 4 ? (
+  <CustomSelect2 options={canPassOptions} poolData={poolData} />
+) : (
+  <p>Loading...</p>
+)}
     </div>
   );
 };
@@ -245,38 +412,101 @@ const StatisticsCard2: React.FC<{ stats: UserStats; index: number }> = ({
   })
 
 
-  const { data: canPassAllPools } = useReadContract({
+  const { data: canPassInvestorPools } = useReadContract({
     contract: MandaLinkContract,
-    method: "canPassAllPools",
+    method: "canPassInvestorPools",
     params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
   })
 
-  // const { data: poolPositions } = useReadContract({
-  //   contract: MandaLinkContract,
-  //   method: "function getPurchases(address userAddress) view returns ((uint256 poolId, uint256 position, bool hasPassed, bool startedInThisPool, bool canContribute)[])",
-  //   params: address ? [address.address] : ["0x0000000000000000000000000000000000000000"]
-  // })
 
-  // const filteredPositions = poolPositions
-  //   ? poolPositions
-  //       .filter((positionObj: any) => positionObj.poolId === BigInt(index))
-  //       .map((positionObj: any) => positionObj.position)
-  //   : [];
-
-  const { data: poolPositions } = useReadContract({
+  const { data: positionData1 } =  useReadContract({
     contract: MandaLinkContract,
     method: "positionsPerPool",
-    params: address ? [address.address,BigInt(1),BigInt(0)] : ["0x0000000000000000000000000000000000000000",BigInt(0),BigInt(0)]
-  })
-  console.log("informacionnn")
-  console.log(poolPositions)
+    params: address ? [address.address, BigInt(index), BigInt(0)] : ["0x0000000000000000000000000000000000000000", BigInt(index), BigInt(0)]
+  });
+  const { data: positionData2 } =  useReadContract({
+    contract: MandaLinkContract,
+    method: "positionsPerPool",
+    params: address ? [address.address, BigInt(index), BigInt(1)] : ["0x0000000000000000000000000000000000000000", BigInt(index), BigInt(1)]
+  });
+  const { data: positionData3 } =  useReadContract({
+    contract: MandaLinkContract,
+    method: "positionsPerPool",
+    params: address ? [address.address, BigInt(index), BigInt(2)] : ["0x0000000000000000000000000000000000000000", BigInt(index), BigInt(2)]
+  });
+  const { data: positionData4 } =  useReadContract({
+    contract: MandaLinkContract,
+    method: "positionsPerPool",
+    params: address ? [address.address, BigInt(index), BigInt(3)] : ["0x0000000000000000000000000000000000000000", BigInt(index), BigInt(3)]
+  });
+  const { data: positionData5 } =  useReadContract({
+    contract: MandaLinkContract,
+    method: "positionsPerPool",
+    params: address ? [address.address, BigInt(index), BigInt(4)] : ["0x0000000000000000000000000000000000000000", BigInt(index), BigInt(4)]
+  });
+  const { data: positionData6 } =  useReadContract({
+    contract: MandaLinkContract,
+    method: "positionsPerPool",
+    params: address ? [address.address, BigInt(index), BigInt(5)] : ["0x0000000000000000000000000000000000000000", BigInt(index), BigInt(5)]
+  });
+  const { data: positionData7 } =  useReadContract({
+    contract: MandaLinkContract,
+    method: "positionsPerPool",
+    params: address ? [address.address, BigInt(index), BigInt(6)] : ["0x0000000000000000000000000000000000000000", BigInt(index), BigInt(6)]
+  });
+  const { data: positionData8 } =  useReadContract({
+    contract: MandaLinkContract,
+    method: "positionsPerPool",
+    params: address ? [address.address, BigInt(index), BigInt(7)] : ["0x0000000000000000000000000000000000000000", BigInt(index), BigInt(7)]
+  });
+  const { data: positionData9 } =  useReadContract({
+    contract: MandaLinkContract,
+    method: "positionsPerPool",
+    params: address ? [address.address, BigInt(index), BigInt(8)] : ["0x0000000000000000000000000000000000000000", BigInt(index), BigInt(8)]
+  });
+  const { data: positionData10 } =  useReadContract({
+    contract: MandaLinkContract,
+    method: "positionsPerPool",
+    params: address ? [address.address, BigInt(index), BigInt(9)] : ["0x0000000000000000000000000000000000000000", BigInt(index), BigInt(9)]
+  });
 
-  // const filteredPositions = poolPositions
-  //   ? poolPositions
-  //       .filter((positionObj: any) => positionObj.poolId === BigInt(index))
-  //       .map((positionObj: any) => positionObj.position)
-  //   : [];
+  const filteredPositions = positionData1 === undefined
+  ? [] // Si positionData1 es undefined, asigna un array vacío
+  : [
+      positionData1?.toString(),
+      positionData2?.toString(),
+      positionData3?.toString(),
+      positionData4?.toString(),
+      positionData5?.toString(),
+      positionData6?.toString(),
+      positionData7?.toString(),
+      positionData8?.toString(),
+      positionData9?.toString(),
+      positionData10?.toString(),
+    ].filter(position => position !== undefined && position !== "N/A");
 
+let displayOptions: any;
+console.log(filteredPositions)
+displayOptions = filteredPositions.length > 0 ? filteredPositions : [];
+
+
+
+const { data: getCanPass } =  useReadContract({
+ contract: MandaLinkContract,
+ method: "getCanPass",
+ params: address ? [BigInt(index)] : [BigInt(index)]
+});
+
+console.log(index)
+console.log(getCanPass)
+
+
+
+const canPassOptions: string[] = getCanPass
+? getCanPass.map((wallet: string) =>
+   wallet === address?.address ? "Tu posición" : wallet
+ )
+: [];
 
   return (
     <div className="w-[55%] lg:w-[25%] flex flex-col items-center justify-center rounded-lg m-2 overflow-visible">
@@ -288,16 +518,22 @@ const StatisticsCard2: React.FC<{ stats: UserStats; index: number }> = ({
           <Indicator
             amount={userData ? Number(userData) : 0}
             id={index - 1}
-            shouldHighlightNextPool={canPassAllPools}
+            shouldHighlightNextPool={canPassInvestorPools}
           />
         </div>
         <div className="absolute inset-0 flex items-center justify-center"></div>
         <div className="mt-8 text-white">
           <div className="text-lg font-normal">{t("landing.totalUsers")}</div>
           <div className="text-3xl font-bold">{poolData ? poolData[1].toString() : "0"}</div>
+          <div style={{fontSize:"45%"}} className=" font-bold">{t("landing.newUsers")}: {poolData ? poolData[2].toString() : "0"}</div>
         </div>
       </div>
-       {/* <CustomSelect options={filteredPositions} />  */}
+      <CustomSelect options={displayOptions} />  
+      {poolData && poolData.length > 4 ? (
+  <CustomSelect2 options={canPassOptions} poolData={poolData} />
+) : (
+  <p>Loading...</p>
+)}
     </div>
   );
 };

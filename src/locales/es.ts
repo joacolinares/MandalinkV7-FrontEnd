@@ -17,6 +17,7 @@ export default {
     // ------------------------------------------------
     statistics: "Estadísticas",
     totalUsers: "Total de usuarios",
+    newUsers: "Usuarios Nuevos",
     position: "Posición",
     paid: "Pagados",
     list: "Lista",

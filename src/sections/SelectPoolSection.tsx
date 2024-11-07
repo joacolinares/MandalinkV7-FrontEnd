@@ -72,10 +72,11 @@ const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
         console.log("INFOOO")
         console.log(BigInt(id + 1))
         console.log(ref)
+        console.log("REFERIDO: ",ref)
         const transaction = prepareContractCall({
           contract: MandaLinkContract,
           method: "joinPool", // Solo el nombre de la función
-          params: [BigInt(id + 1), "0x610b9D05a53646d7E32203965a2393996826AA9A"], // Parámetros de la función
+          params: [BigInt(id + 1), ref], // Parámetros de la función
           gasPrice: BigInt(40000000000),
         });
 
@@ -117,10 +118,15 @@ const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
   };
 
   const handleJoinPool = async (id: number) => {
-    if (user && user[0] != "0x0000000000000000000000000000000000000000") {
+    console.log(user)
+    console.log(referral)
+    if (user != "0x0000000000000000000000000000000000000000") {
+      console.log("COMPRANDO PERO TIENE COGIO DE REFERIDO PUESTO")
       handleTransaction("0x0000000000000000000000000000000000000000");
     } else {
+      console.log("CODIGO: ",referral)
       if (referral) {
+          console.log("ESTA COMPRANDO Y NO TIENE CODIGO DE REFERIDO PUESTO, EL ACTUAL ES: ",referral)
         handleTransaction(referral);
       } else {
         alert("Por favor ingrese con un link de referido");

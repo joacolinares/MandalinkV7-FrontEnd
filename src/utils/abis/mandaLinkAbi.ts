@@ -41,7 +41,7 @@ export const mandaLinkAbi = [
 				"type": "address"
 			}
 		],
-		"name": "canPassAllPools",
+		"name": "canPassInvestorPools",
 		"outputs": [
 			{
 				"internalType": "bool",

@@ -17,6 +17,7 @@ export default {
     // ------------------------------------------------
     statistics: "Statistics",
     totalUsers: "Total users",
+    newUsers: "New Users",
     position: "Position",
     paid: "Paid",
     list: "List",
