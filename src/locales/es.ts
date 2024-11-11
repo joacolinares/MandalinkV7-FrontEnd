@@ -2,7 +2,7 @@ export default {
   landing: {
     // ------------------------------------------------
     connectWallet: "Conectar billetera",
-    downloadHereEnglish: "Descargar aquí (Inglés)",
+    downloadHereEnglish: "Descargar aquí",
     downloadHereSpanish: "Descargar aquí (Español)",
     yourWallet: "Tu billetera",
     earnings: "Ganancias",
