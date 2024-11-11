@@ -34,7 +34,7 @@ const Card: React.FC<{ id: number, amount: string }> = ({ id, amount }) => {
           contract: USDTContract,
           method: "approve",
           params: [MandaLinkContract.address, BigInt(Number(value) * 10**6)],
-          gasPrice: BigInt(150000000000)
+          gasPrice: BigInt(400000000000)
         });
 
         const { transactionHash: approveHash } = await sendTransaction({
