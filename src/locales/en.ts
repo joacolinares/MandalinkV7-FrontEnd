@@ -2,7 +2,7 @@ export default {
   landing: {
     // ------------------------------------------------
     connectWallet: "Connect wallet",
-    downloadHereEnglish: "Download here (English)",
+    downloadHereEnglish: "Download here",
     downloadHereSpanish: "Download here (Spanish)",
     yourWallet: "Your wallet",
     earnings: "Earnings",
