@@ -6,8 +6,8 @@ import { PaymentContractAbi } from "./abis/PaymentContractAbi";
 import { usdtAbi } from "./abis/usdtAbi";
 
 const USDTAddress = "0xc2132d05d31c914a87c6611c10748aeb04b58e8f"
-export const MandaLinkAddress = "0x84BF29F7A1772398Ada3c0b3511d9990A9c6197d"
-export const PaymentAddress = "0xB41a53e07ee8aceC2E4Cb7AC47bB43E6982c0eb4"
+export const MandaLinkAddress = "0x0DAE3A565fdd37F1CC108BeECC176631D81aca2d"
+export const PaymentAddress = "0x62cd03Ca1Da5949ac2Cc1970420980BCc006bc14"
 
 
 export const USDTContract = getContract({
